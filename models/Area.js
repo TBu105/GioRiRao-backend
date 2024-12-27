@@ -44,3 +44,26 @@ const AreaSchema = new mongoose.Schema(
 // Create index to speed up query
 
 module.exports = mongoose.model(DOCUMENT_NAME, AreaSchema);
+
+/** Dữ liệu mẫu
+ * // Tạo dữ liệu mẫu cho Area
+    const areasData = [
+      {
+        name: 'Quận 1',
+        cityId: sampleCity._id,
+        managerId: sampleManager._id,
+        totalStores: 20,
+      },
+      {
+        name: 'Quận 4',
+        cityId: sampleCity._id,
+        managerId: sampleManager._id,
+        totalStores: 15,
+      },
+      {
+        name: 'Quận 8',
+        cityId: sampleCity._id,
+        managerId: sampleManager._id,
+        totalStores: 30,
+      
+ */

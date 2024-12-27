@@ -35,5 +35,15 @@ const HeadquarterSchema = new mongoose.Schema(
   }
 );
 
-// Export the Country model
+// Export the  model
 module.exports = mongoose.model(DOCUMENT_NAME, HeadquarterSchema);
+
+/**Dữ liệu mẫu cho collection "headquarters" 
+ *     {
+        name: 'Gio Ri Rao',
+        managerId: sampleManager._id,
+        totalCities: 10,
+        totalAreas: 20,
+        totalStores: 100,
+      },
+ */

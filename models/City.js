@@ -35,4 +35,21 @@ const CitySchema = new mongoose.Schema(
 
 module.exports = mongoose.model(DOCUMENT_NAME, CitySchema);
 
-
+/** Dữ liệu mẫu cho thành phố
+ * [
+      {
+        managerId: sampleManager._id,
+        name: 'Ho Chi Minh City',
+        totalAreas: 50,
+        totalStores: 200,
+        delete: false,
+      },
+      {
+        managerId: sampleManager._id,
+        name: 'Hanoi',
+        totalAreas: 40,
+        totalStores: 150,
+        delete: false,
+      },
+    ]
+ */
