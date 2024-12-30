@@ -4,7 +4,7 @@ develop: Nhánh phát triển chính
 feature/*: Các nhánh tính năng (VD: feature/login)
 hotfix/*: Nhánh sửa lỗi khẩn cấp
 
-# Quy trình
+# Quy trình sử dụng repo
 Sử dụng link hướng dẫn quy trình github của nhóm
 https://www.youtube.com/watch?v=jRLGobWwA3Y
 
@@ -15,6 +15,9 @@ add code, commit code, push code
 Sau khi code đã được push lên ta tiến hành tạo pull request
 Khi tạo pull request chúng ta cần tuần thủ theo nguyên tắc viết pull request (đọc ở bên dưới)
 
+# Quy trình code
+Trước khi code một chức năng mới ta phải pull code về trước
+
 Khi có một chức năng mới, nhóm chức năng mới, hoặc thay đổi logic của chức năng ta tạo nhánh feature/* để lập trình
 Ví dụ: feature/User, feature/forgotPassword
 
@@ -22,7 +25,7 @@ Khi có một lỗi ngoài ý muốn ta tạo nhánh hotfix/* để sử dụng
 Ví dụ: hotfix/fixLogin
 
 Sau khi lập trình xong, chúng ta tiến hành push code lên github
-Một pull request được tạo tự động và được chờ admin review code để merge vào nhánh develop
+Sau đó tạo pull request để merge code vào reposiotry chính
 
 Khi develop đã chạy ổn định chúng ta tiến hành merge code vào main để deployment
 

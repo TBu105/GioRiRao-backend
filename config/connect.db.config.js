@@ -5,11 +5,11 @@
  */
 
 const {
-  db: { port, host, name },
+  db: { password, name },
 } = require("./server.config");
 const mongoose = require("mongoose");
 
-const connectionString = `mongodb://${host}:${port}/${name}`;
+const connectionString = `mongodb+srv://admin:${password}@cluster-mongodb-lp.dh9rwqr.mongodb.net/${name}?retryWrites=true&w=majority&appName=Cluster-MongoDB-LP`;
 
 class Database {
   constructor() {

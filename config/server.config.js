@@ -5,9 +5,8 @@ const dev = {
     port: process.env.DEV_APP_PORT || 3055,
   },
   db: {
-    port: process.env.DEV_DB_PORT,
-    host: process.env.DEV_DB_HOST,
     name: process.env.DEV_DB_NAME,
+    password: process.env.DEV_DB_PASSWORD,
   },
 };
 
@@ -16,9 +15,8 @@ const prod = {
     port: process.env.PROD_APP_PORT || 3055,
   },
   db: {
-    port: process.env.PROD_DB_PORT,
-    host: process.env.PROD_DB_HOST,
     name: process.env.PROD_DB_NAME,
+    password: process.env.DEV_DB_PASSWORD,
   },
 };
 

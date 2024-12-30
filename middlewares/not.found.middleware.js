@@ -1,4 +1,4 @@
-const { BadRequest } = require("../core/error.response.config");
+const { BadRequest } = require("../config/error.response.config");
 
 const NotFound = (req, res, next) => {
   const error = new BadRequest("Page Not Found");
