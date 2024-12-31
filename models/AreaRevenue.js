@@ -7,12 +7,14 @@ const COLLECTION_NAME = "AreaRevenues";
 // Create the Headquarter schema
 const AreaRevenueSchema = new mongoose.Schema(
   {
+    // Show revenue of the area
     areaId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Area",
       required: true,
       index: true,
     },
+    // Query revenue of the city
     cityId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "City",

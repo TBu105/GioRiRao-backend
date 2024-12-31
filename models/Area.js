@@ -8,18 +8,13 @@ const AreaSchema = new mongoose.Schema(
     // Name of the area, for example: Phường 5, Quận 8, ...
     name: {
       type: String,
-      required: [true, "Please provide city name"],
+      required: [true, "Please provide area name"],
       unique: [true, "This area name already exist "], // Make sure name of the area is not duplicate
     },
     // City's information that area belong to
     cityId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "City", // Reference to the City model
-    },
-    // Reference to the manager user (if applicable)
-    managerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Staff", // Reference to the Staff model
     },
     totalStores: {
       type: Number,
@@ -51,19 +46,13 @@ module.exports = mongoose.model(DOCUMENT_NAME, AreaSchema);
       {
         name: 'Quận 1',
         cityId: sampleCity._id,
-        managerId: sampleManager._id,
         totalStores: 20,
       },
       {
         name: 'Quận 4',
         cityId: sampleCity._id,
-        managerId: sampleManager._id,
         totalStores: 15,
       },
-      {
-        name: 'Quận 8',
-        cityId: sampleCity._id,
-        managerId: sampleManager._id,
-        totalStores: 30,
+]; 
       
  */

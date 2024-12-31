@@ -5,10 +5,6 @@ const COLLECTION_NAME = "Cities";
 
 const CitySchema = new mongoose.Schema(
   {
-    managerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Staff",
-    },
     name: {
       type: String,
       required: [true, "Please provide city name"],
@@ -38,14 +34,12 @@ module.exports = mongoose.model(DOCUMENT_NAME, CitySchema);
 /** Dữ liệu mẫu cho thành phố
  * [
       {
-        managerId: sampleManager._id,
         name: 'Ho Chi Minh City',
         totalAreas: 50,
         totalStores: 200,
         delete: false,
       },
       {
-        managerId: sampleManager._id,
         name: 'Hanoi',
         totalAreas: 40,
         totalStores: 150,
