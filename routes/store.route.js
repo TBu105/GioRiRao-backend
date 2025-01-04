@@ -5,9 +5,9 @@ const { createStoreSchema, updateStoreSchema, updateStoreManagerSchema } = requi
 
 const router = express.Router();
 
-router.post("/", validate(createStoreSchema), storeController.createStore);
+router.post("/:areaId", validate(createStoreSchema), storeController.createStore);
 router.put("/:id", validate(updateStoreSchema), storeController.updateStore);
-router.put("/:id/manager", validate(updateStoreManagerSchema), storeController.updateStoreManager);
+router.put("/:id/staffs", validate(updateStoreManagerSchema), storeController.updateStaff);
 router.get("/area/:areaId", storeController.getStoresByAreaId);
 
 module.exports = router;

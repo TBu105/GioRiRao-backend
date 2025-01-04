@@ -9,11 +9,7 @@ const createAreaSchema = Joi.object({
         "any.required": "Please provide area name",
         "any.invalid": "Area name cannot be null",
     }),
-    cityId: Joi.string().required().custom(objectIdValidator).messages({
-        "any.required": "Please provide cityId",
-        "any.invalid": "Invalid cityId format",
-    }),
-    managerId: Joi.string().optional().custom(objectIdValidator).messages({
+    staffs: Joi.string().optional().custom(objectIdValidator).messages({
         "any.invalid": "Invalid managerId format",
     }),
 });
@@ -25,7 +21,7 @@ const updateAreaOtherFieldsSchema = Joi.object({
         "string.max": "Area name must be less than or equal to 100 characters",
         "any.invalid": "Area name cannot be null",
     }),
-    managerId: Joi.string()
+    staffs: Joi.string()
         .optional()
         .custom(objectIdValidator)
         .messages({

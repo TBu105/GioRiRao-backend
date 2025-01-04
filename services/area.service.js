@@ -1,27 +1,24 @@
-const cityRepository = require("../repositories/city.repo");
 const areaRepository = require("../repositories/area.repo");
+const cityRepository = require("../repositories/city.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 
 const createArea = async (areaData) => {
-    const city = await cityRepository.findCityById(areaData.cityId);
-    if (!city) {
-        throw new NotFound("City not found");
+    const cityExists = await cityRepository.findCityById(areaData.cityId);
+    if (!cityExists) {
+        throw new NotFound("City does not exist.");
     }
-    const area = await areaRepository.createArea(areaData);
-    city.totalAreas += 1;
-    await city.save();
-    return area;
+    return await areaRepository.createArea(areaData);
 };
 
 const updateArea = async (id, updateData) => {
-    if ("deleted" in updateData) {
-        throw new BadRequest("Cannot update the 'deleted' field");
+    if (updateData.deleted !== undefined) {
+        throw new BadRequest("Cannot update the 'deleted' field.");
     }
-    const area = await areaRepository.updateArea(id, updateData);
-    if (!area) {
-        throw new NotFound("Area not found");
+    const areaExists = await areaRepository.findAreaById(id);
+    if (!areaExists) {
+        throw new NotFound("Area not found.");
     }
-    return area;
+    return await areaRepository.updateArea(id, updateData);
 };
 
 const getAreasByCityId = async (cityId) => {
@@ -31,7 +28,7 @@ const getAreasByCityId = async (cityId) => {
 const getAreaById = async (id) => {
     const area = await areaRepository.findAreaById(id);
     if (!area) {
-        throw new NotFound("Area not found");
+        throw new NotFound("Area not found.");
     }
     return area;
 };

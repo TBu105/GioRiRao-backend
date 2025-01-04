@@ -3,39 +3,35 @@ const areaRepository = require("../repositories/area.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 
 const createStore = async (storeData) => {
-    const area = await areaRepository.findAreaById(storeData.areaId);
+    const areaId = storeData.areaId;
+    const area = await areaRepository.findAreaById(areaId);
+
     if (!area) {
-        throw new NotFound("Area not found");
+        throw new Error("Area not found");
     }
+
+    storeData.cityId = area.cityId;
     return await storeRepository.createStore(storeData);
 };
+const updateStore = async (storeId, updateData) => {
+    if (updateData.hasOwnProperty("deleted")) {
+        throw new BadRequest("Cannot update the 'deleted' field.");
+    }
 
-const updateStore = async (id, updateData) => {
-    if ("deleted" in updateData) {
-        throw new BadRequest("Cannot update the 'deleted' field");
-    }
-    const store = await storeRepository.updateStore(id, updateData);
-    if (!store) {
-        throw new NotFound("Store not found");
-    }
-    return store;
+    return await storeRepository.updateStore(storeId, updateData);
 };
 
-const updateStoreManager = async (id, managerId) => {
-    const store = await storeRepository.updateStore(id, { managerId });
-    if (!store) {
-        throw new NotFound("Store not found");
-    }
-    return store;
+const updateStaff = async (storeId, managerId) => {
+    return await storeRepository.updateStore(storeId, { managerId });
 };
 
-const getStoresByAreaId = async (areaId) => {
-    return await storeRepository.findStoresByAreaId(areaId);
+const getStoresByArea = async (areaId) => {
+    return await storeRepository.getStoresByArea(areaId);
 };
 
 module.exports = {
     createStore,
     updateStore,
-    updateStoreManager,
-    getStoresByAreaId,
+    updateStaff,
+    getStoresByArea,
 };

@@ -9,14 +9,14 @@ const createCitySchema = Joi.object({
     "any.required": "Please provide city name",
     "any.invalid": "City name cannot be null",
   }),
-  managerId: Joi.string().optional().custom(objectIdValidator).messages({
+  staffs: Joi.string().optional().custom(objectIdValidator).messages({
     "any.invalid": "Invalid managerId format or cannot be null",
   }),
 });
 
 // Schema to update all fields except 'deleted'
 const updateCityOtherFieldsSchema = Joi.object({
-  managerId: Joi.string()
+  staffs: Joi.string()
     .custom(objectIdValidator)
     .length(24)
     .optional()
@@ -24,7 +24,7 @@ const updateCityOtherFieldsSchema = Joi.object({
       "string.hex": "Manager ID must be a valid ObjectId",
       "string.length": "Manager ID must be 24 characters long",
     }),
-    
+
   name: Joi.string().min(1).max(100).optional().disallow(null).messages({
     "string.base": "City name must be a string",
     "string.min": "City name must be at least 1 characters long",

@@ -21,19 +21,27 @@ const updateCity = asyncHandler(async (req, res) => {
 
 const getAllCities = asyncHandler(async (req, res) => {
   const cities = await cityService.getAllCities();
-  res.status(HttpStatusCodes.OK.code).json({ cities });
+  res.status(HttpStatusCodes.OK.code).json({
+    message: "Retrieved all cities successfully",
+    cities,
+  });
 });
 
 const getCityById = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const city = await cityService.getCityById(id);
-  res.status(HttpStatusCodes.OK.code).json({ city });
+  res.status(HttpStatusCodes.OK.code).json({
+    message: `Retrieved city details successfully for ID: ${id}`,
+    city,
+  });
 });
 
 const deleteCity = asyncHandler(async (req, res) => {
   const { id } = req.params;
   await cityService.deleteCity(id);
-  res.status(HttpStatusCodes.OK.code).json({ message: "City marked as deleted" });
+  res.status(HttpStatusCodes.OK.code).json({
+    message: `City with ID: ${id} marked as deleted successfully`,
+  });
 });
 
 module.exports = {

@@ -12,14 +12,6 @@ const createStoreSchema = Joi.object({
     email: Joi.string().email().optional().messages({
         "string.email": "Invalid email format",
     }),
-    areaId: Joi.string().required().custom(objectIdValidator).messages({
-        "any.required": "Area ID is required",
-        "any.invalid": "Invalid Area ID",
-    }),
-    cityId: Joi.string().required().custom(objectIdValidator).messages({
-        "any.required": "City ID is required",
-        "any.invalid": "Invalid City ID",
-    }),
     managerId: Joi.string().optional().custom(objectIdValidator).messages({
         "any.invalid": "Invalid Manager ID",
     }),
