@@ -1,48 +1,17 @@
 const cityRepository = require("../repositories/city.repo");
-const { BadRequest, NotFound } = require("../config/error.response.config");
+const { BadRequest } = require("../config/error.response.config");
 
 const createCity = async (cityData) => {
+  // Check if a city with the same name already exists
   const existingCity = await cityRepository.findCityByName(cityData.name);
+  console.log(existingCity);
   if (existingCity) {
     throw new BadRequest("City with this name already exists.");
   }
+  // Create the new city
   return await cityRepository.createCity(cityData);
-};
-
-const updateCity = async (id, updateData) => {
-  if (updateData.hasOwnProperty("deleted")) {
-    throw new BadRequest("The 'deleted' field cannot be updated directly.");
-  }
-  const updatedCity = await cityRepository.updateCityById(id, updateData);
-  if (!updatedCity) {
-    throw new NotFound("City not found.");
-  }
-  return updatedCity;
-};
-
-const getAllCities = async () => {
-  return await cityRepository.findAllCities();
-};
-
-const getCityById = async (id) => {
-  const city = await cityRepository.findCityById(id);
-  if (!city) {
-    throw new NotFound("City not found.");
-  }
-  return city;
-};
-
-const deleteCity = async (id) => {
-  const updatedCity = await cityRepository.updateCityById(id, { deleted: true });
-  if (!updatedCity) {
-    throw new NotFound("City not found.");
-  }
 };
 
 module.exports = {
   createCity,
-  updateCity,
-  getAllCities,
-  getCityById,
-  deleteCity,
 };
