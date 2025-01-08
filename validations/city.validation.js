@@ -13,15 +13,6 @@ const createCitySchema = Joi.object({
 
 // Schema to update all fields except 'deleted'
 const updateCityOtherFieldsSchema = Joi.object({
-  staffs: Joi.string()
-    .custom(objectIdValidator)
-    .length(24)
-    .optional()
-    .messages({
-      "string.hex": "Manager ID must be a valid ObjectId",
-      "string.length": "Manager ID must be 24 characters long",
-    }),
-
   name: Joi.string().min(1).max(100).optional().disallow(null).messages({
     "string.base": "City name must be a string",
     "string.min": "City name must be at least 1 characters long",

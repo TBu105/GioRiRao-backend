@@ -16,7 +16,7 @@ const findStoreByName = async (name) => {
     return await Store.findOne({ name }).lean();
 };
 const findStoreById = async (id) => {
-    return await Store.findById(id).lean();
+    return await Store.findById(id, { deleted: false }).lean();
 };
 module.exports = {
     createStore,

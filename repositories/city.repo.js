@@ -7,7 +7,7 @@ const createCity = async (cityData) => {
 };
 
 const findCityByName = async (name) => {
-  return await City.findOne({ name }).lean();
+  return await City.findOne({ name, deleted: false }).lean();
 };
 
 const findCityById = async (id) => {
@@ -19,7 +19,7 @@ const findAllCities = async () => {
 };
 
 const updateCityById = async (id, updateData) => {
-  return await City.findByIdAndUpdate(id, updateData, { new: true });
+  return await City.findByIdAndUpdate(id, updateData, { new: true, deleted: false });
 };
 
 module.exports = {

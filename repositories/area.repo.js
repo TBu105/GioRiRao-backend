@@ -7,7 +7,7 @@ const createArea = async (areaData) => {
 
 const findAreaById = async (id) => {
 
-    return await Area.findById(id).lean();
+    return await Area.findById(id, { deleted: false }).lean();
 };
 
 const updateArea = async (id, updateData) => {
@@ -18,7 +18,7 @@ const findAreasByCityId = async (cityId) => {
     return await Area.find({ cityId, deleted: false }).lean();
 };
 const findAreaByName = async (name) => {
-    return await Area.findOne({ name }).lean();
+    return await Area.findOne({ name, deleted: false }).lean();
 };
 module.exports = {
     createArea,

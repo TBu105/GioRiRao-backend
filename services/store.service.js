@@ -2,6 +2,7 @@ const storeRepository = require("../repositories/store.repo");
 const areaRepository = require("../repositories/area.repo");
 const cityRepository = require("../repositories/city.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
+const { addStaffToStore } = require("../controllers/store.controller");
 
 const createStore = async (storeData) => {
     const { areaId, name } = storeData;
@@ -43,23 +44,44 @@ const updateStore = async (storeId, updateData) => {
     if (!store) {
         throw new NotFound("Store not found.");
     }
-
-    // Kiểm tra store có bị xóa không
-    if (store.deleted) {
-        throw new BadRequest("Cannot update a deleted store.");
-    }
-
     // Không cho phép cập nhật trường 'deleted'
     if (updateData.hasOwnProperty("deleted")) {
         throw new BadRequest("Cannot update the 'deleted' field.");
     }
-
     return await storeRepository.updateStore(storeId, updateData);
 };
-
-const updateStaff = async (storeId, managerId) => {
+const updateManager = async (storeId, managerId) => {
+    const store = await storeRepository.findStoreById(storeId);
+    if (!store) {
+        throw new NotFound("Store not found.");
+    }
+    if (store.deleted) {
+        throw new BadRequest("Cannot update staff for a deleted store.");
+    }
     return await storeRepository.updateStore(storeId, { managerId });
 };
+const updateStaff = async (storeId, staffIds) => {
+    const store = await storeRepository.findStoreById(storeId);
+    if (!store) {
+        throw new NotFound("Store not found.");
+    }
+    const updatedStaffs = [...new Set([...(store.staffs || []), ...staffIds])];
+    return await storeRepository.updateStore(storeId, { staffs: updatedStaffs });
+};
+const deleteStaffs = async (storeId, staffIdsToDelete) => {
+    const store = await storeRepository.findStoreById(storeId);
+    if (!store) {
+        throw new NotFound("Store not found.");
+    }
+    // Lọc danh sách staff hiện tại, loại bỏ staff cần xóa
+    const updatedStaffs = store.staffs.filter(
+        (staffId) => !staffIdsToDelete.includes(staffId.toString())
+    );
+
+    // Cập nhật lại danh sách staffs
+    return await storeRepository.updateStore(storeId, { staffs: updatedStaffs });
+};
+
 
 const getStoresByArea = async (areaId) => {
     return await storeRepository.getStoresByArea(areaId);
@@ -68,6 +90,8 @@ const getStoresByArea = async (areaId) => {
 module.exports = {
     createStore,
     updateStore,
-    updateStaff,
+    updateManager,
     getStoresByArea,
+    updateStaff,
+    deleteStaffs,
 };

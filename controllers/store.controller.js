@@ -20,13 +20,28 @@ const updateStore = asyncHandler(async (req, res) => {
     });
 });
 
-const updateStaff = asyncHandler(async (req, res) => {
-    const store = await storeService.updateStaff(req.params.id, req.body.staffs);
+const updateManager = asyncHandler(async (req, res) => {
+    const store = await storeService.updateManager(req.params.id, req.body.managerId);
     res.status(HttpStatusCodes.OK.code).json({
         message: "Store manager updated successfully",
         store,
     });
 });
+const updateStaff = asyncHandler(async (req, res) => {
+    const store = await storeService.updateStaff(req.params.id, req.body.staffs);
+    res.status(HttpStatusCodes.OK.code).json({
+        message: "Staffs added successfully to the store.",
+        store,
+    });
+});
+const deleteStaff = asyncHandler(async (req, res) => {
+    const store = await storeService.deleteStaffs(req.params.id, req.body.staffs);
+    res.status(HttpStatusCodes.OK.code).json({
+        message: "Store staff deleted successfully",
+        store,
+    });
+});
+
 
 const getStoresByAreaId = asyncHandler(async (req, res) => {
     const stores = await storeService.getStoresByArea(req.params.areaId);
@@ -39,6 +54,8 @@ const getStoresByAreaId = asyncHandler(async (req, res) => {
 module.exports = {
     createStore,
     updateStore,
-    updateStaff,
+    updateManager,
     getStoresByAreaId,
+    updateStaff,
+    deleteStaff,
 };
