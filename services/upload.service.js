@@ -1,29 +1,36 @@
 const cloudinary = require("../config/cloundinary.config");
+const { BadRequest } = require("../config/error.response.config");
+const fs = require("fs/promises");
 
 class UploadService {
-  async uploadImageFromLocal(
-    path,
-    { folderName = "test", imgHeight, imgWidth, imgFormat = "jpg" }
+  async uploadImage(
+    filePath,
+    { folderName = "test", imgHeight, imgWidth, imgFormat = "webp" }
   ) {
-    const result = await cloudinary.uploader.upload(path, {
-      //   public_id: "thumb",
-      folder: folderName,
-    });
+    try {
+      if (!filePath) {
+        throw new BadRequest("There is no file uploaded");
+      }
 
-    const resizeUrl = cloudinary.url(result.public_id, {
-      height: Number(imgHeight),
-      width: Number(imgWidth),
-      format: imgFormat,
-      crop: "fill", // Ensures the image is resized proportionally
-    });
+      const result = await cloudinary.uploader.upload(filePath.path, {
+        //   public_id: "thumb",
+        folder: folderName,
+        format: imgFormat,
+        height: Number(imgHeight),
+        width: Number(imgWidth),
+        crop: "fill", // Ensures the image is resized proportionally
+      });
 
-    console.log("result:::", result);
-    return { photoUrl: result.secure_url, resizeUrl };
+      return { photoUrl: result.secure_url };
+    } finally {
+      // Clean up local files
+      fs.unlink(filePath.path).catch(console.error);
+    }
   }
 
-  async uploadImagesFromLocal(
+  async uploadImages(
     files,
-    { folderName = "test", imgHeight, imgWidth, imgFormat = "jpg" }
+    { folderName = "test", imgHeight, imgWidth, imgFormat = "webp" }
   ) {
     const resizeUrl = [];
     const photosUrl = [];
@@ -32,12 +39,12 @@ class UploadService {
       const result = await cloudinary.uploader.upload(files[i].path, {
         //   public_id: "thumb",
         folder: folderName,
+        format: imgFormat,
       });
 
       const resize = cloudinary.url(result.public_id, {
         height: Number(imgHeight),
         width: Number(imgWidth),
-        format: imgFormat,
         crop: "fill", // Ensures the image is resized proportionally
       });
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 const DOCUMENT_NAME = "Store";
 const COLLECTION_NAME = "Stores";
@@ -24,7 +25,13 @@ const StoreSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      match: [/.+@.+\..+/, "Please provide a valid email"],
+      validate: {
+        validator: function (v) {
+          // Use validator's isEmail method to check if the email is valid
+          return validator.isEmail(v);
+        },
+        message: "Please enter a valid email address", // Custom error message
+      },
     },
     // Area's information that the store belongs to (e.g., ObjectId of a specific area)
     areaId: {

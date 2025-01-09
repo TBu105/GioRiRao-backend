@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const validator = require("validator");
 
 // Define constants for the model and collection names
 const DOCUMENT_NAME = "Staff";
@@ -11,13 +12,19 @@ const StaffSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
     email: {
       type: String,
       required: true,
       lowercase: true,
-      unique,
+      unique: true,
+      validate: {
+        validator: function (v) {
+          // Use validator's isEmail method to check if the email is valid
+          return validator.isEmail(v);
+        },
+        message: "Please enter a valid email address", // Custom error message
+      },
     },
     password: {
       type: String,
@@ -31,21 +38,21 @@ const StaffSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+      default: "default.jpg",
+    },
     role: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Role",
+      type: String,
+      enum: [
+        "admin",
+        "managerStore",
+        "staffShipper",
+        "staffCashier",
+        "staffBarista",
+        "staffWaiter",
+      ],
       required: true,
-    },
-    customPermissions: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Permission",
-    }],
-    failedLoginAttempts: {
-      type: Number,
-      default: 0,
-    },
-    lockUntil: {
-      type: Number,
     },
   },
   {
