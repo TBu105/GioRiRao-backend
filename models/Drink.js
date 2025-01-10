@@ -56,7 +56,7 @@ const DrinkSchema = new mongoose.Schema(
     },
     flags: {
       isBestSeller: { type: Boolean, default: false },
-      isNew: { type: Boolean, default: false },
+      isNew: { type: Boolean, default: true },
       isSeasonSpecial: { type: Boolean, default: false },
     },
     category: {
@@ -64,10 +64,10 @@ const DrinkSchema = new mongoose.Schema(
       required: [true, "Please provide drink category"],
       enum: ["coffee", "tea", "smoothie", "juice", "others"],
     },
-    tags: [{ type: String, index: true}],
+    tags: [{ type: String, index: true }],
     // indication of whether data has been deleted or not
     deleted: {
-      type: Boolean,    
+      type: Boolean,
       default: false,
     },
   },

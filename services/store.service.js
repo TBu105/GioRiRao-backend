@@ -2,7 +2,6 @@ const storeRepository = require("../repositories/store.repo");
 const areaRepository = require("../repositories/area.repo");
 const cityRepository = require("../repositories/city.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
-const { addStaffToStore } = require("../controllers/store.controller");
 
 const createStore = async (storeData) => {
     const { areaId, name } = storeData;
