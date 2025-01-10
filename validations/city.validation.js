@@ -10,6 +10,16 @@ const createCitySchema = Joi.object({
   }),
 });
 
+const createCitiesSchema = Joi.array().items(Joi.object({
+  name: Joi.string().required().min(1).max(100).disallow(null).messages({
+    "string.base": "City name must be a string",
+    "string.min": "City name must be at least 1 characters long",
+    "string.max": "City name must be less than or equal to 100 characters",
+    "any.required": "Please provide city name",
+    "any.invalid": "City name cannot be null",
+  }),
+}));
+
 // Schema to update all fields except 'deleted'
 const updateCityOtherFieldsSchema = Joi.object({
   name: Joi.string().min(1).max(100).optional().disallow(null).messages({
@@ -43,4 +53,5 @@ module.exports = {
   createCitySchema,
   updateCityOtherFieldsSchema,
   updateCityDeletedFieldSchema,
+  createCitiesSchema,
 };
