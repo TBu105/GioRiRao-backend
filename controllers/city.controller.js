@@ -10,6 +10,14 @@ const createCity = asyncHandler(async (req, res) => {
   });
 });
 
+const createCitiesInBulk = asyncHandler(async (req, res) => {
+  const cities = await cityService.createCitiesInBulk(req.body);
+  res.status(HttpStatusCodes.CREATED.code).json({
+    message: "Cities created successfully",
+    cities,
+  });
+})
+
 const updateCity = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const updatedCity = await cityService.updateCity(id, req.body);
@@ -42,4 +50,5 @@ module.exports = {
   updateCity,
   getAllCities,
   getCityById,
+  createCitiesInBulk,
 };

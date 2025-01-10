@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const { objectIdValidator } = require("./common.validation");
 
 const createCitySchema = Joi.object({
   name: Joi.string().required().min(1).max(100).disallow(null).messages({
@@ -10,6 +9,16 @@ const createCitySchema = Joi.object({
     "any.invalid": "City name cannot be null",
   }),
 });
+
+const createCitiesSchema = Joi.array().items(Joi.object({
+  name: Joi.string().required().min(1).max(100).disallow(null).messages({
+    "string.base": "City name must be a string",
+    "string.min": "City name must be at least 1 characters long",
+    "string.max": "City name must be less than or equal to 100 characters",
+    "any.required": "Please provide city name",
+    "any.invalid": "City name cannot be null",
+  }),
+}));
 
 // Schema to update all fields except 'deleted'
 const updateCityOtherFieldsSchema = Joi.object({
@@ -44,4 +53,5 @@ module.exports = {
   createCitySchema,
   updateCityOtherFieldsSchema,
   updateCityDeletedFieldSchema,
+  createCitiesSchema,
 };

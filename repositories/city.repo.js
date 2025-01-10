@@ -6,8 +6,31 @@ const createCity = async (cityData) => {
   return await city.save();
 };
 
+const bulkWriteCities = async (bulkOperations, session) => {
+  return await City.bulkWrite(bulkOperations, { session });
+};
+
 const findCityByName = async (name) => {
   return await City.findOne({ name, deleted: false }).lean();
+};
+
+const findCitiesByName = async (names, session) => {
+  // Tìm tất cả thành phố có tên trong names array
+  // names: ['city1', 'city2']
+  const cities = await City.find({
+    name: { $in: names },
+    deleted: false,
+  })
+    .session(session)
+    .lean();
+
+  /**
+   * cities result: [
+  { _id: 'abc123', name: 'city 1'},
+  { _id: 'def456', name: 'city 2' }
+]
+   */
+  return cities;
 };
 
 const findCityById = async (id) => {
@@ -19,12 +42,17 @@ const findAllCities = async () => {
 };
 
 const updateCityById = async (id, updateData) => {
-  return await City.findByIdAndUpdate(id, updateData, { new: true, deleted: false });
+  return await City.findByIdAndUpdate(id, updateData, {
+    new: true,
+    deleted: false,
+  });
 };
 
 module.exports = {
   createCity,
+  bulkWriteCities,
   findCityByName,
+  findCitiesByName,
   findCityById,
   findAllCities,
   updateCityById,
