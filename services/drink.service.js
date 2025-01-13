@@ -1,11 +1,13 @@
 const drinkRepo = require("../repositories/drink.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
+const uploadService = require("./upload.service");
 
-const createDrink = async (drinkData) => {
+const createDrink = async (drinkData, thumbnailFile, imageFiles) => {
     const existingDrink = await drinkRepo.findDrinkByName(drinkData.name);
     if (existingDrink) {
         throw new BadRequest("Drink with this name already exists.");
     }
+
     const newDrink = await drinkRepo.createDrink(drinkData);
     setTimeout(async () => {
         newDrink.flags.isNew = false;
@@ -18,9 +20,6 @@ const updateDrink = async (id, updateData) => {
         throw new BadRequest("The 'deleted' field cannot be updated directly.");
     }
     const updatedDrink = await drinkRepo.updateDrinkById(id, updateData);
-    if (!updatedDrink) {
-        throw new NotFound("Drink not found.");
-    }
     return updatedDrink;
 }
 const getAllDrinks = async () => {

@@ -1,13 +1,35 @@
 const drinkService = require('../services/drink.service');
 const asyncHandler = require('../utils/async.handler.util');
 const HttpStatusCodes = require('../config/http.status.config');
+const uploadService = require('../services/upload.service');
 
 const createDrink = asyncHandler(async (req, res) => {
     const drink = await drinkService.createDrink(req.body);
     res.status(HttpStatusCodes.CREATED.code).json({
-        message: 'Drink created successfully',
+        message: 'Create drink successfully, image is processing...',
         drink,
     });
+    const thumbnailUpload = await uploadService.uploadImage(req.fields.thumbnail, {
+        folderName: "drinkThumbnails",
+        imgHeight: 300,
+        imgWidth: 300,
+    });
+    const imagesUpload = await uploadService.uploadImages(req.fields.images, {
+        folderName: "drinkImages",
+        imgHeight: 600,
+        imgWidth: 600,
+    });
+    const newDrinkData = {
+        ...drinkData,
+        thumbnail: thumbnailUpload.photoUrl,
+        images: imagesUpload.photosUrl.map((url, index) => ({
+            url,
+            alt: `${name} image ${index + 1}`,
+            order: index + 1,
+        })),
+    };
+    const newDrink = await drinkService.updateDrink(newDrinkData);
+    return newDrink;
 });
 const updateDrink = asyncHandler(async (req, res) => {
     const { id } = req.params;

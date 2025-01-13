@@ -28,13 +28,12 @@ const DrinkSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      required: [true, "Please provide drink slug"],
+      // required: [true, "Please provide drink slug"],
       unique: [true, "This drink slug already exist "], // Make sure slug of the drink is not duplicate
       index: true,
     },
     thumbnail: {
       type: String,
-      required: [true, "Please provide drink thumbnail"],
     },
     images: [
       {
