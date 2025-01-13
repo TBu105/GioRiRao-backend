@@ -18,10 +18,9 @@ const ToppingSchema = new mongoose.Schema(
     },
     thumbnail: {
       type: String,
-      required: [true, "Please provide topping image"],
     },
     // indication of whether data has been deleted or not
-    deleted: {
+  deleted: {
       type: Boolean,
       default: false,
     },

@@ -10,8 +10,9 @@ const bulkWriteCities = async (bulkOperations, session) => {
   return await City.bulkWrite(bulkOperations, { session });
 };
 
-const findCityByName = async (name) => {
-  return await City.findOne({ name, deleted: false }).lean();
+const findCity = async (data) => {
+  let query = {...data, deleted: false}
+  return await City.findOne(query).lean();
 };
 
 const findCitiesByName = async (names, session) => {
@@ -51,7 +52,7 @@ const updateCityById = async (id, updateData) => {
 module.exports = {
   createCity,
   bulkWriteCities,
-  findCityByName,
+  findCity,
   findCitiesByName,
   findCityById,
   findAllCities,

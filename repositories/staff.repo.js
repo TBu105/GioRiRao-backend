@@ -5,8 +5,8 @@ const signUpStaff = async (data) => {
   return await staff.save();
 };
 
-const findStaffByEmail = async (email) => {
-  const staff = await Staff.findOne({ email });
+const findStaff = async (data) => {
+  const staff = await Staff.findOne(data);
   return staff;
 };
 
@@ -15,8 +15,8 @@ const findStaffById = async (id) => {
   return staff;
 };
 
-const updateStaff = async (data) => {
-  const updatedStaff = await Staff.findByIdAndUpdate(data.adminId, data, {
+const updateStaff = async (staffId, data) => {
+  const updatedStaff = await Staff.findByIdAndUpdate(staffId, data, {
     new: true,
   });
 
@@ -25,7 +25,7 @@ const updateStaff = async (data) => {
 
 module.exports = {
   signUpStaff,
-  findStaffByEmail,
+  findStaff,
   findStaffById,
   updateStaff,
 };
