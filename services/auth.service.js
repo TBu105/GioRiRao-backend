@@ -1,13 +1,14 @@
 const staffRepository = require("../repositories/staff.repo");
+const storeRepository = require("../repositories/store.repo");
 const { BadRequest } = require("../config/error.response.config");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const refreshTokenRepository = require("../repositories/refreshToken.repo");
+const refreshTokenRepository = require("../repositories/refresh.token.repo");
 
 // auth-signUpAdmin
 const signUpAdmin = async (data) => {
-  const existingAdmin = await staffRepository.findStaffByEmail(data.email);
+  const existingAdmin = await staffRepository.findStaff({ email: data.email });
   if (existingAdmin) {
     throw new BadRequest("Admin account with this email already exists.");
   }
@@ -25,28 +26,48 @@ const signUpAdmin = async (data) => {
 
 // auth-signUpStaff
 const signUpStaff = async (data) => {
-  const existingStaff = await staffRepository.findStaffByEmail(data.email);
+  console.log("data ", data.managerId);
+  console.log("data ", typeof data.managerId);
+
+  // const [existingStaff, store] = await Promise.all([
+  //   staffRepository.findStaff({ email: data.email }),
+  //   storeRepository.findStore({ managerId: data.managerId }),
+  // ]);
+
+  const existingStaff = await staffRepository.findStaff({ email: data.email });
+
+  const store = await storeRepository.findStore({ managerId: data.managerId });
+
   if (existingStaff) {
     throw new BadRequest("Staff account with this email already exists.");
   }
 
   const saltRounds = 10;
-  const hashedPassword = bcrypt.hash(data.password, saltRounds);
+  const hashedPassword = await bcrypt.hash(data.password, saltRounds);
   data.password = hashedPassword;
 
   const newStaff = await staffRepository.signUpStaff(data);
+
+  console.log("newStaff", newStaff);
+  console.log("store", store);
+
+  await storeRepository.updateStoreStaff(store._id, newStaff._id);
 
   return newStaff;
 };
 
 // auth-loginStaff
 const loginStaff = async (email, password) => {
-  const staff = await staffRepository.findStaffByEmail(email);
+  const staff = await staffRepository.findStaff({ email: email });
   if (!staff) {
     throw new BadRequest("Invalid email or password.");
   }
 
-  const match = await bcrypt.compare(password, staff.password);
+  const [match] = await Promise.all([
+    bcrypt.compare(password, staff.password),
+    refreshTokenRepository.revokeRefreshToken({ userId: staff._id }),
+  ]);
+
   if (!match) {
     throw new BadRequest("Invalid email or password.");
   }

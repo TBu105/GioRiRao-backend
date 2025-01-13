@@ -2,15 +2,14 @@ const cityRepository = require("../repositories/city.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 const mongoose = require("mongoose");
 
-const createCity = async (cityData, session = null) => {
-  const existingCity = await cityRepository.findCityByName(
-    cityData.name,
-    session
+const createCity = async (cityData) => {
+  const existingCity = await cityRepository.findCity(
+    {name: cityData.name},
   );
   if (existingCity) {
     throw new BadRequest("City with this name already exists.");
   }
-  return await cityRepository.createCity(cityData, session);
+  return await cityRepository.createCity(cityData);
 };
 
 const createCitiesInBulk = async (citiesData) => {
@@ -42,6 +41,8 @@ const createCitiesInBulk = async (citiesData) => {
         { _id: 'abc123', name: 'city 1'},
         { _id: 'def456', name: 'city 2' }
       ] nếu city 1, 2 đã tồn tại trong db
+
+      
    */
     const existingCities = await cityRepository.findCitiesByName(
       citiesData.map((city) => city.name),
@@ -61,7 +62,7 @@ const createCitiesInBulk = async (citiesData) => {
         { "name": "Đà Nẵng" },
       ]
         thành
-          * ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Đà Nẵng"]
+          * ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Đà Nẵng", "Vĩnh Long"]
 
         filter lọc dữ liêu trùng lặp từ ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng", "Đà Nẵng"]
         thành ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng"]
@@ -87,9 +88,10 @@ const createCitiesInBulk = async (citiesData) => {
      * Bây giờ chúng ta sẽ bulk write vào database
      * ta convert ["Hà Nội", "Hồ Chí Minh", "Đà Nẵng"] thành
      * [
-          { insertOne: { document: "Hà Nội" } },
+          { insertOne: { document: {name: "Hà Nội"} } },
           { insertOne: { document: "Hồ Chí Minh" } },
-          { insertOne: { document: "Đà Nẵng" } }]
+          { insertOne: { document: "Đà Nẵng" } }
+        ]
 
       sử dụng removeDuplicate.map(city => ({insertOne: {document: city}}))
      */

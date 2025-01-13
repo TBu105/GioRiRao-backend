@@ -12,18 +12,32 @@ const DrinkSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
-    price: {
+    basePrice: {
       type: Number,
-      required: [true, "Please provide drink price"],
       min: 0,
+      required: [true, "Please provide drink size"],
     },
+    customization: [
+      {
+        size: {
+          type: String,
+          required: [true, "Please provide drink size"],
+          enum: ["S", "M", "L"],
+        },
+        price: {
+          type: Number,
+          required: [true, "Please provide drink customization"],
+          min: 0,
+        },
+      },
+    ],
     description: {
       type: String,
       trim: true,
     },
     shortDescription: {
       type: String,
-      maxlength: 100,
+      max: 100,
       trim: true,
     },
     slug: {
@@ -81,11 +95,6 @@ const DrinkSchema = new mongoose.Schema(
 
 module.exports = mongoose.model(DOCUMENT_NAME, DrinkSchema);
 
-/**
- * Query pattern
- *
- *
- */
 
 /**
  * Sử dụng định dạng webp cho ảnh

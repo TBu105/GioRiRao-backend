@@ -21,6 +21,8 @@ class UploadService {
         crop: "fill", // Ensures the image is resized proportionally
       });
 
+      console.log("result:::", result);
+
       return { photoUrl: result.secure_url };
     } finally {
       // Clean up local files
@@ -32,7 +34,6 @@ class UploadService {
     files,
     { folderName = "test", imgHeight, imgWidth, imgFormat = "webp" }
   ) {
-    const resizeUrl = [];
     const photosUrl = [];
 
     for (let i = 0; i < files.length; i++) {
@@ -40,21 +41,16 @@ class UploadService {
         //   public_id: "thumb",
         folder: folderName,
         format: imgFormat,
-      });
-
-      const resize = cloudinary.url(result.public_id, {
         height: Number(imgHeight),
         width: Number(imgWidth),
-        crop: "fill", // Ensures the image is resized proportionally
+        crop: "fill",
       });
 
       photosUrl.push(result.secure_url);
-      resizeUrl.push(resize);
     }
     console.log("photosUrl:::", photosUrl);
-    console.log("resizeUrl:::", resizeUrl);
 
-    return { photosUrl, resizeUrl };
+    return { photosUrl };
   }
 }
 

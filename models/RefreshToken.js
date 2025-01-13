@@ -20,7 +20,6 @@ const RefreshTokenSchema = new mongoose.Schema(
     refreshToken: {
       type: String,
       required: true,
-      unique: true, // Ensure each token is unique
     },
     revoked: {
       type: Boolean,
@@ -39,7 +38,8 @@ const RefreshTokenSchema = new mongoose.Schema(
  */
 
 // Index for query faster
+// Add a compound index for userId and revoked
+RefreshTokenSchema.index({ userId: 1, revoked: 1 });
 
 // Export the RefreshToken model
 module.exports = mongoose.model(DOCUMENT_NAME, RefreshTokenSchema);
-
