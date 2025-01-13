@@ -16,9 +16,6 @@ const createDrink = async (drinkData, thumbnailFile, imageFiles) => {
     return newDrink;
 }
 const updateDrink = async (id, updateData) => {
-    if (updateData.hasOwnProperty("deleted")) {
-        throw new BadRequest("The 'deleted' field cannot be updated directly.");
-    }
     const updatedDrink = await drinkRepo.updateDrinkById(id, updateData);
     return updatedDrink;
 }

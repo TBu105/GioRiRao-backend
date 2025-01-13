@@ -9,26 +9,27 @@ const createDrink = asyncHandler(async (req, res) => {
         message: 'Create drink successfully, image is processing...',
         drink,
     });
-    const thumbnailUpload = await uploadService.uploadImage(req.fields.thumbnail, {
+    const thumbnailUpload = await uploadService.uploadImage(req.files.thumbnail[0], {
         folderName: "drinkThumbnails",
         imgHeight: 300,
         imgWidth: 300,
+
     });
-    const imagesUpload = await uploadService.uploadImages(req.fields.images, {
+    console.log("thumbnailUpload", thumbnailUpload);
+    const imagesUpload = await uploadService.uploadImages(req.files.images, {
         folderName: "drinkImages",
         imgHeight: 600,
         imgWidth: 600,
     });
     const newDrinkData = {
-        ...drinkData,
         thumbnail: thumbnailUpload.photoUrl,
         images: imagesUpload.photosUrl.map((url, index) => ({
             url,
-            alt: `${name} image ${index + 1}`,
+            alt: `image ${index + 1}`,
             order: index + 1,
         })),
     };
-    const newDrink = await drinkService.updateDrink(newDrinkData);
+    const newDrink = await drinkService.updateDrink(drink._id, newDrinkData);
     return newDrink;
 });
 const updateDrink = asyncHandler(async (req, res) => {

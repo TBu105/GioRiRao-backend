@@ -6,16 +6,15 @@ const createArea = asyncHandler(async (req, res) => {
     const { cityId } = req.params;
     const areaData = { ...req.body, cityId };
     const area = await areaService.createArea(areaData);
-    res.status(HttpStatusCodes.CREATED.code).json({
+    return res.status(HttpStatusCodes.CREATED.code).json({
         message: "Area created successfully",
         area,
     });
 });
 
-
 const updateArea = asyncHandler(async (req, res) => {
     const updatedArea = await areaService.updateArea(req.params.id, req.body);
-    res.status(HttpStatusCodes.OK.code).json({
+    return res.status(HttpStatusCodes.OK.code).json({
         message: "Area updated successfully",
         updatedArea,
     });
@@ -23,7 +22,7 @@ const updateArea = asyncHandler(async (req, res) => {
 
 const getAreasByCityId = asyncHandler(async (req, res) => {
     const areas = await areaService.getAreasByCityId(req.params.cityId);
-    res.status(HttpStatusCodes.OK.code).json({
+    return res.status(HttpStatusCodes.OK.code).json({
         message: `Retrieved all areas successfully for City ID: ${req.params.cityId}`,
         areas,
     });
@@ -31,7 +30,7 @@ const getAreasByCityId = asyncHandler(async (req, res) => {
 
 const getAreaById = asyncHandler(async (req, res) => {
     const area = await areaService.getAreaById(req.params.id);
-    res.status(HttpStatusCodes.OK.code).json({
+    return res.status(HttpStatusCodes.OK.code).json({
         message: `Retrieved area details successfully for ID: ${req.params.id}`,
         area,
     });
