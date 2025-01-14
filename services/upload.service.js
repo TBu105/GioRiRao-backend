@@ -19,7 +19,6 @@ class UploadService {
         width: Number(imgWidth),
         crop: "fill", // Ensures the image is resized proportionally
       });
-      console.log("result:::", result);
       return { photoUrl: result.secure_url };
     } finally {
       // Clean up local files

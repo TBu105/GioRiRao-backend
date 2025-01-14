@@ -10,7 +10,7 @@ const createDrinkSchema = Joi.object({
         "any.invalid": "Drink name cannot be null",
     }),
 
-    price: Joi.number().required().min(0).messages({
+    basePrice: Joi.number().required().min(0).messages({
         "number.base": "Price must be a number",
         "number.min": "Price must be greater than or equal to 0",
         "any.required": "Please provide price",
@@ -28,33 +28,48 @@ const createDrinkSchema = Joi.object({
         "string.base": "Short description must be a string",
         "string.max": "Short description must be less than or equal to 100 characters",
     }),
-    // ingredients: Joi.array().items(Joi.object({
-    //     name: Joi.string().required().disallow(null).messages({
-    //         "string.base": "Ingredient name must be a string",
-    //         "any.required": "Please provide ingredient name",
-    //         "any.invalid": "Ingredient name cannot be null",
-    //     }),
-    //     quantity: Joi.string().required().disallow(null).messages({
-    //         "string.base": "Ingredient quantity must be a string",
-    //         "any.required": "Please provide ingredient quantity",
-    //         "any.invalid": "Ingredient quantity cannot be null",
-    //     }),
-    //     unit: Joi.string().required().disallow(null).messages({
-    //         "string.base": "Ingredient unit must be a string",
-    //         "any.required": "Please provide ingredient unit",
-    //         "any.invalid": "Ingredient unit cannot be null",
-    //     }),
-    // })).required().messages({
-    //     "array.base": "Ingredients must be an array",
-    //     "any.required": "Please provide ingredients",
-    // }),
+    ingredients: Joi.array().items(Joi.object({
+        name: Joi.string().required().disallow(null).messages({
+            "string.base": "Ingredient name must be a string",
+            "any.required": "Please provide ingredient name",
+            "any.invalid": "Ingredient name cannot be null",
+        }),
+        quantity: Joi.string().required().disallow(null).messages({
+            "string.base": "Ingredient quantity must be a string",
+            "any.required": "Please provide ingredient quantity",
+            "any.invalid": "Ingredient quantity cannot be null",
+        }),
+        unit: Joi.string().required().disallow(null).messages({
+            "string.base": "Ingredient unit must be a string",
+            "any.required": "Please provide ingredient unit",
+            "any.invalid": "Ingredient unit cannot be null",
+        }),
+    })).required().messages({
+        "array.base": "Ingredients must be an array",
+        "any.required": "Please provide ingredients",
+    }),
     recipe: Joi.string().allow(null).messages({
         "string.base": "Recipe must be a string",
     }),
-    // tags: Joi.array().items(Joi.string().required().disallow(null)).required().messages({
-    //     "array.base": "Tags must be an array",
-    //     "any.required": "Please provide tags",
-    // }),
+    tags: Joi.array().items(Joi.string().required().disallow(null)).required().messages({
+        "array.base": "Tags must be an array",
+        "any.required": "Please provide tags",
+    }),
+    customization: Joi.array().items(Joi.object({
+        size: Joi.string().required().disallow(null).messages({
+            "string.base": "Size must be a string",
+            "any.required": "Please provide size",
+            "any.invalid": "Size cannot be null",
+        }),
+        price: Joi.number().required().min(0).messages({
+            "number.base": "Price must be a number",
+            "number.min": "Price must be greater than or equal to 0",
+            "any.required": "Please provide price",
+        }),
+    })).required().messages({
+        "array.base": "Customization must be an array",
+        "any.required": "Please provide customization",
+    }),
 });
 
 module.exports = { createDrinkSchema };

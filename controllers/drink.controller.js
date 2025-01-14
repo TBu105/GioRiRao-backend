@@ -4,6 +4,9 @@ const HttpStatusCodes = require('../config/http.status.config');
 const uploadService = require('../services/upload.service');
 
 const createDrink = asyncHandler(async (req, res) => {
+    const slug = req.body.name.toLowerCase().replace(/[\s_]+/g, '-');//toLowerCase chuyển sang chữ thường, replace thay thế khoảng trắng và dấu gạch dưới bằng dấu gạch ngang
+    req.body.slug = slug;
+    console.log("body", req.body);
     const drink = await drinkService.createDrink(req.body);
     res.status(HttpStatusCodes.CREATED.code).json({
         message: 'Create drink successfully, image is processing...',
@@ -21,6 +24,7 @@ const createDrink = asyncHandler(async (req, res) => {
         imgHeight: 600,
         imgWidth: 600,
     });
+
     const newDrinkData = {
         thumbnail: thumbnailUpload.photoUrl,
         images: imagesUpload.photosUrl.map((url, index) => ({
@@ -29,6 +33,7 @@ const createDrink = asyncHandler(async (req, res) => {
             order: index + 1,
         })),
     };
+    console.log("newDrinkData", newDrinkData);
     const newDrink = await drinkService.updateDrink(drink._id, newDrinkData);
     return newDrink;
 });
