@@ -9,13 +9,6 @@ const createDrinkSchema = Joi.object({
         "any.required": "Please provide drink name",
         "any.invalid": "Drink name cannot be null",
     }),
-
-    basePrice: Joi.number().required().min(0).messages({
-        "number.base": "Price must be a number",
-        "number.min": "Price must be greater than or equal to 0",
-        "any.required": "Please provide price",
-    }),
-
     category: Joi.string().required().disallow(null).messages({
         "string.base": "Category must be a string",
         "any.required": "Please provide category",

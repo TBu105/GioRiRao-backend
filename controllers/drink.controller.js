@@ -46,10 +46,13 @@ const updateDrink = asyncHandler(async (req, res) => {
     });
 });
 const getAllDrinks = asyncHandler(async (req, res) => {
-    const drinks = await drinkService.getAllDrinks();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const sort = req.query.sort || "-createdAt";
+    const drinks = await drinkService.getAllDrinks({ page, limit, sort });
     res.status(HttpStatusCodes.OK.code).json({
         message: 'Retrieved all drinks successfully',
-        drinks,
+        ...drinks,
     });
 });
 const getDrinkById = asyncHandler(async (req, res) => {

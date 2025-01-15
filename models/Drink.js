@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const mongoosePaginate = require("mongoose-paginate-v2");
 
 const DOCUMENT_NAME = "Drink";
 const COLLECTION_NAME = "Drinks";
@@ -11,11 +12,6 @@ const DrinkSchema = new mongoose.Schema(
       unique: [true, "This drink name already exist "], // Make sure name of the drink is not duplicate
       trim: true,
       index: true,
-    },
-    basePrice: {
-      type: Number,
-      min: 0,
-      required: [true, "Please provide drink size"],
     },
     customization: [
       {

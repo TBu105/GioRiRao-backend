@@ -10,8 +10,15 @@ const findDrinkByName = async (name) => {
 const findDrinkById = async (id) => {
     return await Drink.findById(id, { deleted: false }).lean();
 };
-const findAllDrinks = async () => {
-    return await Drink.find({ deleted: false }).lean();
+const findAllDrinks = async ({ skip, limit, sort }) => {
+    return await Drink.find({ deleted: false })
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .lean();
+};
+const countAllDrinks = async () => {
+    return await Drink.countDocuments({ deleted: false });
 };
 const updateDrinkById = async (id, updateData) => {
     return await Drink.findByIdAndUpdate(id, updateData, { new: true, deleted: false });
@@ -30,4 +37,5 @@ module.exports = {
     updateDrinkById,
     deleteDrinkById,
     getIngredientsRecipe,
+    countAllDrinks,
 };

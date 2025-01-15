@@ -19,8 +19,24 @@ const updateDrink = async (id, updateData) => {
     const updatedDrink = await drinkRepo.updateDrinkById(id, updateData);
     return updatedDrink;
 }
-const getAllDrinks = async () => {
-    return await drinkRepo.findAllDrinks();
+const getAllDrinks = async ({ page, limit, sort }) => {
+
+    const skip = (page - 1) * limit;
+    const [docs, totalDocs] = await Promise.all([
+        drinkRepo.findAllDrinks({ skip, limit, sort }),
+        drinkRepo.countAllDrinks()
+    ]);
+    return {
+        docs,
+        totalDocs,
+        limit,
+        totalPages: Math.ceil(totalDocs / limit),
+        page,
+        hasPrevPage: page > 1,
+        hasNextPage: page * limit < totalDocs,
+        prevPage: page > 1 ? page - 1 : null,
+        nextPage: page * limit < totalDocs ? page + 1 : null,
+    };
 }
 const getDrinkById = async (id) => {
     const drink = await drinkRepo.findDrinkById(id);
