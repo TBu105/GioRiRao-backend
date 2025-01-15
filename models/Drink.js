@@ -12,11 +12,6 @@ const DrinkSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
-    basePrice: {
-      type: Number,
-      min: 0,
-      required: [true, "Please provide drink size"],
-    },
     customization: [
       {
         size: {
@@ -94,8 +89,3 @@ const DrinkSchema = new mongoose.Schema(
 // Indexes for performance
 
 module.exports = mongoose.model(DOCUMENT_NAME, DrinkSchema);
-
-
-/**
- * Sử dụng định dạng webp cho ảnh
- */

@@ -38,6 +38,7 @@ const signUpAdmin = asyncHandler(async (req, res) => {
 
 // chưa hoàn thành, chưa có validation
 const signUpStaff = asyncHandler(async (req, res) => {
+  
   req.body.managerId = req.user.userId;
   const staff = await authService.signUpStaff(req.body);
 
