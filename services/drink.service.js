@@ -1,6 +1,7 @@
 const drinkRepo = require("../repositories/drink.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 const uploadService = require("./upload.service");
+const agenda = require("../config/agenda.config");
 
 const createDrink = async (drinkData, thumbnailFile, imageFiles) => {
     const existingDrink = await drinkRepo.findDrinkByName(drinkData.name);
@@ -9,10 +10,7 @@ const createDrink = async (drinkData, thumbnailFile, imageFiles) => {
     }
 
     const newDrink = await drinkRepo.createDrink(drinkData);
-    setTimeout(async () => {
-        newDrink.flags.isNew = false;
-        await newDrink.save();
-    }, 7 * 24 * 60 * 60 * 1000); // 1 tuần
+    await agenda.schedule('in 7 days', 'set isNew to false', { id: newDrink._id });
     return newDrink;
 }
 const updateDrink = async (id, updateData) => {

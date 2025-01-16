@@ -12,10 +12,10 @@ router.post('/', uploadDisk.fields([
     { name: 'thumbnail', maxCount: 1 },  // Chỉ chấp nhận 1 file cho 'thumbnail'
     { name: 'images', maxCount: 10 }     // Chấp nhận tối đa 10 file cho 'images'
 ]), validate(createDrinkSchema), drinkController.createDrink);
-router.put('/:id', drinkController.updateDrink);
+router.put('/:id', verifyAccessToken, authorize(["admin"]), drinkController.updateDrink);
 router.get('/', drinkController.getAllDrinks);
 router.get('/:id', drinkController.getDrinkById);
-router.put('/delete/:id', drinkController.deleteDrink);
+router.put('/delete/:id', verifyAccessToken, authorize(["admin"]), drinkController.deleteDrink);
 router.get('/:id/ingredients-recipe', drinkController.getIngredientsRecipe);
 router.get('/name/:name', drinkController.getDrinkByName);
 
