@@ -21,6 +21,7 @@ const countAllDrinks = async () => {
     return await Drink.countDocuments({ deleted: false });
 };
 const updateDrinkById = async (id, updateData) => {
+    console.log("Data", updateData)
     return await Drink.findByIdAndUpdate(id, updateData, { new: true, deleted: false });
 };
 const deleteDrinkById = async (id) => {
