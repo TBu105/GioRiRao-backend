@@ -9,7 +9,9 @@ const createTopping = asyncHandler(async (req, res) => {
     throw new BadRequest("Please provide topping image");
   }
 
-  const { validationError } = createToppingSchema.validate();
+  const { validationError } = createToppingSchema.validate(req.body, {
+    abortEarly: false,
+  });
 
   if (validationError) {
     const message = validationError.map((detail) => detail.message).join(", ");

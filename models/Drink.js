@@ -89,8 +89,3 @@ const DrinkSchema = new mongoose.Schema(
 // Indexes for performance
 
 module.exports = mongoose.model(DOCUMENT_NAME, DrinkSchema);
-
-
-/**
- * Sử dụng định dạng webp cho ảnh
- */
