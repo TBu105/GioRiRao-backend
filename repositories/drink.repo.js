@@ -7,6 +7,9 @@ const createDrink = async (drinkData) => {
 const findDrinkByName = async (name) => {
     return await Drink.findOne({ name, deleted: false }).lean();
 };
+const findDrinkByCategory = async (category) => {
+    return await Drink.findOne({ category, deleted: false }).lean();
+}
 const findDrinkById = async (id) => {
     return await Drink.findById(id, { deleted: false }).lean();
 };
@@ -21,7 +24,6 @@ const countAllDrinks = async () => {
     return await Drink.countDocuments({ deleted: false });
 };
 const updateDrinkById = async (id, updateData) => {
-    console.log("Data", updateData)
     return await Drink.findByIdAndUpdate(id, updateData, { new: true, deleted: false });
 };
 const deleteDrinkById = async (id) => {
@@ -39,4 +41,5 @@ module.exports = {
     deleteDrinkById,
     getIngredientsRecipe,
     countAllDrinks,
+    findDrinkByCategory
 };

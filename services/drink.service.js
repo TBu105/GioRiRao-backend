@@ -64,4 +64,11 @@ const getDrinkByName = async (name) => {
     }
     return drink;
 }
-module.exports = { updateDrink, createDrink, getAllDrinks, getDrinkById, deleteDrink, getIngredientsRecipe, getDrinkByName };
+const getDrinkByCategory = async (category) => {
+    const drink = await drinkRepo.findDrinkByCategory(category)
+    if (!drink) {
+        throw new NotFound("Drink not found.");
+    }
+    return drink;
+}
+module.exports = { updateDrink, createDrink, getAllDrinks, getDrinkById, deleteDrink, getIngredientsRecipe, getDrinkByName, getDrinkByCategory };

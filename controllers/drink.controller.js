@@ -52,6 +52,7 @@ const getAllDrinks = asyncHandler(async (req, res) => {
         ...drinks,
     });
 });
+
 const getDrinkById = asyncHandler(async (req, res) => {
     const { id } = req.params;
     const drink = await drinkService.getDrinkById(id);
@@ -84,6 +85,14 @@ const getDrinkByName = asyncHandler(async (req, res) => {
         drink,
     });
 });
+const getDrinkByCategory = asyncHandler(async (req, res) => {
+    const { category } = req.params;
+    const drink = await drinkService.getDrinkByCategory(category);
+    return res.status(HttpStatusCodes.OK.code).json({
+        message: `All drink by ${category}`,
+        drink,
+    })
+})
 module.exports = {
     updateDrink,
     createDrink,
@@ -92,4 +101,5 @@ module.exports = {
     deleteDrink,
     getIngredientsRecipe,
     getDrinkByName,
+    getDrinkByCategory,
 };

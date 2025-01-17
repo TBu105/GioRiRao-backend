@@ -7,7 +7,7 @@ const agenda = new Agenda({
     processEvery: '1 day', // Tần suất quét các công việc
 });
 
-// Khởi tạo các công việc
+// Khởi tạo công việc cho Drink mới
 agenda.define('set isNew to false', async (job) => {
     const { id } = job.attrs.data;
     await drinkRepo.updateDrinkById(id, { "flags.isNew": false });
@@ -16,7 +16,6 @@ agenda.define('set isNew to false', async (job) => {
 
 (async function () {
     await agenda.start();
-    console.log('Agenda started!');
 })();
 
 module.exports = agenda;
