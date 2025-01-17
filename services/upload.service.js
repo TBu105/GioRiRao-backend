@@ -11,7 +11,6 @@ class UploadService {
       if (!filePath) {
         throw new BadRequest("There is no file uploaded");
       }
-
       const result = await cloudinary.uploader.upload(filePath.path, {
         //   public_id: "thumb",
         folder: folderName,
@@ -20,9 +19,6 @@ class UploadService {
         width: Number(imgWidth),
         crop: "fill", // Ensures the image is resized proportionally
       });
-
-      console.log("result:::", result);
-
       return { photoUrl: result.secure_url };
     } finally {
       // Clean up local files
@@ -48,8 +44,6 @@ class UploadService {
 
       photosUrl.push(result.secure_url);
     }
-    console.log("photosUrl:::", photosUrl);
-
     return { photosUrl };
   }
 }
