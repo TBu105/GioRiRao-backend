@@ -4,71 +4,81 @@ const uploadService = require("./upload.service");
 const agenda = require("../config/agenda.config");
 
 const createDrink = async (drinkData, thumbnailFile, imageFiles) => {
-    const existingDrink = await drinkRepo.findDrinkByName(drinkData.name);
-    if (existingDrink) {
-        throw new BadRequest("Drink with this name already exists.");
-    }
+  const existingDrink = await drinkRepo.findDrinkByName(drinkData.name);
+  if (existingDrink) {
+    throw new BadRequest("Drink with this name already exists.");
+  }
 
-    const newDrink = await drinkRepo.createDrink(drinkData);
-    await agenda.schedule('in 7 days', 'set isNew to false', { id: newDrink._id });
-    return newDrink;
-}
+  const newDrink = await drinkRepo.createDrink(drinkData);
+  await agenda.schedule("in 7 days", "set isNew to false", {
+    id: newDrink._id,
+  });
+  return newDrink;
+};
 const updateDrink = async (id, updateData) => {
-    const updatedDrink = await drinkRepo.updateDrinkById(id, updateData);
-    return updatedDrink;
-}
+  const updatedDrink = await drinkRepo.updateDrinkById(id, updateData);
+  return updatedDrink;
+};
 const getAllDrinks = async ({ page, limit, sort }) => {
-
-    const skip = (page - 1) * limit;
-    const [docs, totalDocs] = await Promise.all([
-        drinkRepo.findAllDrinks({ skip, limit, sort }),
-        drinkRepo.countAllDrinks()
-    ]);
-    return {
-        docs,
-        totalDocs,
-        limit,
-        totalPages: Math.ceil(totalDocs / limit),
-        page,
-        hasPrevPage: page > 1,
-        hasNextPage: page * limit < totalDocs,
-        prevPage: page > 1 ? page - 1 : null,
-        nextPage: page * limit < totalDocs ? page + 1 : null,
-    };
-}
+  const skip = (page - 1) * limit;
+  const [docs, totalDocs] = await Promise.all([
+    drinkRepo.findAllDrinks({ skip, limit, sort }),
+    drinkRepo.countAllDrinks(),
+  ]);
+  return {
+    docs,
+    totalDocs,
+    limit,
+    totalPages: Math.ceil(totalDocs / limit),
+    page,
+    hasPrevPage: page > 1,
+    hasNextPage: page * limit < totalDocs,
+    prevPage: page > 1 ? page - 1 : null,
+    nextPage: page * limit < totalDocs ? page + 1 : null,
+  };
+};
 const getDrinkById = async (id) => {
-    const drink = await drinkRepo.findDrinkById(id);
-    if (!drink) {
-        throw new NotFound("Drink not found.");
-    }
-    return drink;
-}
+  const drink = await drinkRepo.findDrinkById(id);
+  if (!drink) {
+    throw new NotFound("Drink not found.");
+  }
+  return drink;
+};
 const deleteDrink = async (id) => {
-    const deletedDrink = await drinkRepo.deleteDrinkById(id);
-    if (!deletedDrink) {
-        throw new NotFound("Drink not found.");
-    }
-    return deletedDrink;
+  const deletedDrink = await drinkRepo.deleteDrinkById(id);
+  if (!deletedDrink) {
+    throw new NotFound("Drink not found.");
+  }
+  return deletedDrink;
 };
 const getIngredientsRecipe = async (id) => {
-    const drink = await drinkRepo.getIngredientsRecipe(id);
-    if (!drink) {
-        throw new NotFound("Drink not found.");
-    }
-    return drink;
-}
-const getDrinkByName = async (name) => {
-    const drink = await drinkRepo.findDrinkByName(name);
-    if (!drink) {
-        throw new NotFound("Drink not found.");
-    }
-    return drink;
-}
+  const drink = await drinkRepo.getIngredientsRecipe(id);
+  if (!drink) {
+    throw new NotFound("Drink not found.");
+  }
+  return drink;
+};
+const getDrinkBySlug = async (name) => {
+  const drink = await drinkRepo.findDrinkBySlug(name);
+  if (!drink) {
+    throw new NotFound("Drink not found.");
+  }
+  return drink;
+};
 const getDrinkByCategory = async (category) => {
-    const drink = await drinkRepo.findDrinkByCategory(category)
-    if (!drink) {
-        throw new NotFound("Drink not found.");
-    }
-    return drink;
-}
-module.exports = { updateDrink, createDrink, getAllDrinks, getDrinkById, deleteDrink, getIngredientsRecipe, getDrinkByName, getDrinkByCategory };
+  const drink = await drinkRepo.findDrinkByCategory(category);
+  if (!drink) {
+    throw new NotFound("Drink not found.");
+  }
+  return drink;
+};
+module.exports = {
+  updateDrink,
+  createDrink,
+  getAllDrinks,
+  getDrinkById,
+  deleteDrink,
+  getIngredientsRecipe,
+  getDrinkBySlug,
+  getDrinkByCategory,
+};
