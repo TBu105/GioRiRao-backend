@@ -2,18 +2,12 @@ const jwt = require("jsonwebtoken");
 const HttpStatusCodes = require("../config/http.status.config");
 
 const verifyAccessToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
+  const token = req.cookies.accessToken;
 
-  if (!authHeader) {
+  if (!token) {
     return res
       .status(HttpStatusCodes.UNAUTHORIZED.code)
       .json({ message: "Access token is required" });
-  }
-
-  const token = authHeader.split(" ")[1];
-
-  if (!token) {
-    return res.status(403).json({ message: "Access token not found" });
   }
 
   try {

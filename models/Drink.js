@@ -11,7 +11,6 @@ const DrinkSchema = new mongoose.Schema(
       required: [true, "Please provide drink name"],
       unique: [true, "This drink name already exist "], // Make sure name of the drink is not duplicate
       trim: true,
-      index: true,
     },
     customization: [
       {
@@ -30,16 +29,17 @@ const DrinkSchema = new mongoose.Schema(
     description: {
       type: String,
       trim: true,
+      required: [true, "Please provide drink description"],
     },
     shortDescription: {
       type: String,
       max: 100,
       trim: true,
+      required: [true, "Please provide drink short description"],
     },
     slug: {
       type: String,
       // required: [true, "Please provide drink slug"],
-      unique: [true, "This drink slug already exist "], // Make sure slug of the drink is not duplicate
       index: true,
     },
     thumbnail: {
@@ -87,5 +87,6 @@ const DrinkSchema = new mongoose.Schema(
 );
 
 // Indexes for performance
+DrinkSchema.index({ name: "text" });
 
 module.exports = mongoose.model(DOCUMENT_NAME, DrinkSchema);

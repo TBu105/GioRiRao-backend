@@ -6,25 +6,33 @@ const createTopping = async (data) => {
 };
 
 const findTopping = async (data) => {
-    let query = {
-        ...data,
-        deleted: false
-    }
+  let query = {
+    ...data,
+    deleted: false,
+  };
 
-    const topping = await Topping.findOne(query)
+  const topping = await Topping.findOne(query);
 
-    return topping
-}
+  return topping;
+};
 
 const updateTopping = async (query, data) => {
+  const updatedTopping = await Topping.findOneAndUpdate(query, data, {
+    new: true,
+  });
 
-    const updatedTopping = await Topping.findOneAndUpdate(query, data, {new: true})
+  return updatedTopping;
+};
 
-    return updatedTopping;
-}
+const getAllToppings = async () => {
+  const toppings = await Topping.find({});
+
+  return toppings;
+};
 
 module.exports = {
   findTopping,
   createTopping,
   updateTopping,
+  getAllToppings,
 };
