@@ -58,8 +58,8 @@ const getIngredientsRecipe = async (id) => {
   }
   return drink;
 };
-const getDrinkBySlug = async (name) => {
-  const drink = await drinkRepo.findDrinkBySlug(name);
+const getDrinkByName = async (name) => {
+  const drink = await drinkRepo.findDrinkByName(name);
   if (!drink) {
     throw new NotFound("Drink not found.");
   }
@@ -79,6 +79,6 @@ module.exports = {
   getDrinkById,
   deleteDrink,
   getIngredientsRecipe,
-  getDrinkBySlug,
+  getDrinkByName,
   getDrinkByCategory,
 };

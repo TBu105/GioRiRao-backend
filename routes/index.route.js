@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-router.use("/city", require("./city.route"));
-router.use("/area", require("./area.route"));
-router.use("/store", require("./store.route"));
+router.use("/cities", require("./city.route"));
+router.use("/areas", require("./area.route"));
+router.use("/stores", require("./store.route"));
 router.use("/auth", require("./auth.route"));
-router.use("/topping", require("./topping.route"));
-router.use("/store", require("./store.route"));
+router.use("/toppings", require("./topping.route"));
 router.use("/drinks", require("./drink.route"));
-router.use("/order", require("./order.route"));
+router.use("/orders", require("./order.route"));
 
 module.exports = router;

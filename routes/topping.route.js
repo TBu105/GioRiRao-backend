@@ -14,4 +14,11 @@ router.post(
   toppingController.createTopping
 );
 
+router.get(
+  "/",
+  //   verifyAccessToken,
+  //   authorize(["admin"]),
+  toppingController.getAllToppings
+);
+
 module.exports = router;

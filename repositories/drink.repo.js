@@ -4,14 +4,28 @@ const createDrink = async (drinkData) => {
   const drink = new Drink(drinkData);
   return await drink.save();
 };
-const findDrinkBySlug = async (slug) => {
-  return await Drink.findOne({ slug, deleted: false }).lean();
+const findDrinkByNameFullTextSearch = async (name) => {
+  const drinks = await Drink.find({
+    $text: { $search: name },
+  }).lean();
+  return drinks;
 };
-const findDrinkByCategory = async (category) => {
-  return await Drink.find({ category, deleted: false }).lean();
+const findDrinkByNameRegex = async (regexPattern) => {
+  const drinks = await Drink.find({ name: { $regex: regexPattern } });
+  return drinks;
+};
+const findDrinkByCategory = async (category, { skip, limit, sort }) => {
+  return await Drink.find({ category, deleted: false })
+    .sort(sort)
+    .skip(skip)
+    .limit(limit)
+    .lean();
 };
 const findDrinkById = async (id) => {
   return await Drink.findById(id, { deleted: false }).lean();
+};
+const getCategories = async () => {
+  return await Drink.distinct("category").lean();
 };
 const findAllDrinks = async ({ skip, limit, sort }) => {
   return await Drink.find({ deleted: false })
@@ -37,7 +51,8 @@ const getIngredientsRecipe = async (id) => {
 };
 module.exports = {
   createDrink,
-  findDrinkBySlug,
+  findDrinkByNameFullTextSearch,
+  findDrinkByNameRegex,
   findDrinkById,
   findAllDrinks,
   updateDrinkById,
@@ -45,4 +60,5 @@ module.exports = {
   getIngredientsRecipe,
   countAllDrinks,
   findDrinkByCategory,
+  getCategories,
 };

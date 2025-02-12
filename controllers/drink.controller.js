@@ -79,9 +79,9 @@ const getIngredientsRecipe = asyncHandler(async (req, res) => {
     drink,
   });
 });
-const getDrinkBySlug = asyncHandler(async (req, res) => {
+const getDrinkByName = asyncHandler(async (req, res) => {
   const { name } = req.params;
-  const drink = await drinkService.getDrinkBySlug(name);
+  const drink = await drinkService.getDrinkByName(name);
   return res.status(HttpStatusCodes.OK.code).json({
     message: `Retrieved drink details successfully for name: ${name}`,
     drink,
@@ -102,6 +102,6 @@ module.exports = {
   getDrinkById,
   deleteDrink,
   getIngredientsRecipe,
-  getDrinkBySlug,
+  getDrinkByName,
   getDrinkByCategory,
 };

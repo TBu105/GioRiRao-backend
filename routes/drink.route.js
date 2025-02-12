@@ -10,6 +10,29 @@ const {
 } = require("../validations/drink.validation");
 
 const router = express.Router();
+
+router.get("/categories", drinkController.getCategories);
+router.get("/search", drinkController.getDrinkByName);
+
+router.put(
+  "/delete/:id",
+  verifyAccessToken,
+  authorize(["admin"]),
+  drinkController.deleteDrink
+);
+
+router.put(
+  "/:id",
+  verifyAccessToken,
+  authorize(["admin"]),
+  drinkController.updateDrink
+);
+
+router.get("/:id", drinkController.getDrinkById);
+
+router.get("/:id/ingredients-recipe", drinkController.getIngredientsRecipe);
+
+router.get("/category/:category", drinkController.getDrinkByCategory);
 router.post(
   "/",
   uploadDisk.fields([
@@ -19,22 +42,6 @@ router.post(
   validate(createDrinkSchema),
   drinkController.createDrink
 );
-router.put(
-  "/:id",
-  verifyAccessToken,
-  authorize(["admin"]),
-  drinkController.updateDrink
-);
 router.get("/", drinkController.getAllDrinks);
-router.get("/:id", drinkController.getDrinkById);
-router.put(
-  "/delete/:id",
-  verifyAccessToken,
-  authorize(["admin"]),
-  drinkController.deleteDrink
-);
-router.get("/:id/ingredients-recipe", drinkController.getIngredientsRecipe);
-router.get("/name/:name", drinkController.getDrinkBySlug);
-router.get("/category/:category", drinkController.getDrinkByCategory);
 
 module.exports = router;
