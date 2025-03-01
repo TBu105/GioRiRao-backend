@@ -3,73 +3,59 @@ const mongoose = require("mongoose");
 const DOCUMENT_NAME = "Order";
 const COLLECTION_NAME = "Orders";
 
-const ToppingOrderDetailSchema = new mongoose.Schema(
-  {
-    toppingId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Topping",
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    quantity: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-    subtotal: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-  }
-);
+const ToppingOrderDetailSchema = new mongoose.Schema({
+  toppingId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Topping",
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+});
 
-const OrderDetailSchema = new mongoose.Schema(
-  {
-    drinkId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Drink",
-      required: true,
-    },
-    drinkName: {
-      type: String,
-      required: true,
-    },
-    drinkPrice: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-    size: {
-      type: String,
-      required: true,
-      enum: ["S", "M", "L"], // You can customize this
-    },
-    quantity: {
-      type: Number,
-      required: true,
-      min: 1,
-    },
-    note: {
-      type: String,
-      trim: true,
-    },
-    toppings: [ToppingOrderDetailSchema],
-    total: {
-      type: Number,
-      required: true,
-      min: 0,
-    },
-  }
-);
+const OrderDetailSchema = new mongoose.Schema({
+  drinkId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Drink",
+    required: true,
+  },
+  drinkName: {
+    type: String,
+    required: true,
+  },
+  drinkPrice: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  size: {
+    type: String,
+    required: true,
+    enum: ["S", "M", "L"], // You can customize this
+  },
+  quantity: {
+    type: Number,
+    required: true,
+    min: 1,
+  },
+  note: {
+    type: String,
+    trim: true,
+  },
+  toppings: [ToppingOrderDetailSchema],
+  total: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+});
 
 const OrderSchema = new mongoose.Schema(
   {
@@ -99,8 +85,8 @@ const OrderSchema = new mongoose.Schema(
     paymentMethod: {
       type: String,
       required: true,
-      enum: ["CASH", "CARD", "MOBILE_PAYMENT"],
-      default: "CASH",
+      enum: ["Cash", "CARD", "MOBILE_PAYMENT"],
+      default: "Cash",
     },
     total: {
       type: Number,

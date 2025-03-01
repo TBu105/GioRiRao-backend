@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const mongoosePaginate = require("mongoose-paginate-v2");
 
 const DOCUMENT_NAME = "Drink";
 const COLLECTION_NAME = "Drinks";

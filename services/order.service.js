@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 
 const createOrder = async (orderData) => {
   const session = await mongoose.startSession();
-
   try {
     session.startTransaction();
     // body
@@ -12,11 +11,11 @@ const createOrder = async (orderData) => {
       throw new BadRequest("Order must have at least one drink");
     }
 
-    const newOrder = await orderRepository.createOrder(orderData, session)
+    const newOrder = await orderRepository.createOrder(orderData, session);
 
     await session.commitTransaction();
 
-    return newOrder
+    return newOrder;
   } catch (error) {
     await session.abortTransaction();
     throw error;
