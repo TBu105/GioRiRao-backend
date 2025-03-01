@@ -46,8 +46,26 @@ const getAllToppings = asyncHandler(async (req, res) => {
     toppings,
   });
 });
+const updateTopping = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const updateTopping = await toppingService.updateTopping(id, req.body);
+  res.status(HttpStatusCodes.OK.code).json({
+    message: "Update toppings successfully",
+    updateTopping,
+  });
+});
+const deleteTopping = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  const deletedTopping = await toppingService.deleteTopping(id);
 
+  res.status(HttpStatusCodes.OK.code).json({
+    message: "Topping deleted successfully",
+    deletedTopping,
+  });
+});
 module.exports = {
+  deleteTopping,
+  updateTopping,
   createTopping,
   getAllToppings,
 };
