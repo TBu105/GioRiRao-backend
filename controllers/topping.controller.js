@@ -9,33 +9,28 @@ const createTopping = asyncHandler(async (req, res) => {
     throw new BadRequest("Please provide topping image");
   }
 
-  const { validationError } = createToppingSchema.validate(req.body, {
+  const { error } = createToppingSchema.validate(req.body, {
     abortEarly: false,
   });
 
-  if (validationError) {
-    const message = validationError.map((detail) => detail.message).join(", ");
+  if (error) {
+    const message = error.details.map((detail) => detail.message).join(", ");
     throw new BadRequest(message);
   }
-
   const newTopping = await toppingService.createTopping(req.body);
-
-  res.status(HttpStatusCodes.CREATED.code).json({
-    message: "Topping created successfully, image is processing...",
-    newTopping,
-  });
-
   const toppingThumbnail = await uploadService.uploadImage(req.file, {
     folderName: "toppingThumbnails",
     imgHeight: 300,
     imgWidth: 300,
   });
-
-  let payload = {
+  const updatedTopping = await toppingService.updateTopping(newTopping._id, {
     thumbnail: toppingThumbnail.photoUrl,
-  };
+  });
 
-  await toppingService.updateTopping(newTopping._id, payload);
+  res.status(HttpStatusCodes.CREATED.code).json({
+    message: "Topping created successfully!",
+    newTopping: updatedTopping, // Trả về topping đã có ảnh
+  });
 });
 
 const getAllToppings = asyncHandler(async (req, res) => {
