@@ -49,8 +49,12 @@ const deleteDrinkById = async (id) => {
 const getIngredientsRecipe = async (id) => {
   return await Drink.findById(id, { ingredients: 1, recipe: 1 }).lean();
 };
+const findDrinkByName = async (name) => {
+  return await Drink.find({ name: name }).lean();
+};
 module.exports = {
   createDrink,
+  findDrinkByName,
   findDrinkByNameFullTextSearch,
   findDrinkByNameRegex,
   findDrinkById,

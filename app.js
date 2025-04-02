@@ -17,7 +17,7 @@ require("./config/connect.db.config");
 app.use(
   cors({
     origin: "http://localhost:5173", // Allow your frontend origin
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allow specific HTTP methods
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"], // Allow specific HTTP methods
     credentials: true, // Include credentials if needed (e.g., cookies)
   })
 );

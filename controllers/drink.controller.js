@@ -2,15 +2,32 @@ const drinkService = require("../services/drink.service");
 const asyncHandler = require("../utils/async.handler.util");
 const HttpStatusCodes = require("../config/http.status.config");
 const uploadService = require("../services/upload.service");
+const {
+  ingredientsSchema,
+  customizationSchema,
+  tagsSchema,
+} = require("../validations/stringtoarray.validation");
+const parseAndValidateArray = (data, schema, fieldName) => {
+  let parsedData;
+  // Nếu dữ liệu là chuỗi, chuyển thành array
+  if (typeof data === "string") {
+    try {
+      parsedData = JSON.parse(data);
+    } catch (error) {
+      return { error: `${fieldName} must be a valid JSON array.` };
+    }
+  } else {
+    parsedData = data;
+  }
+
+  // Validate với Joi schema
+  const { error } = schema.validate(parsedData);
+  if (error) return { error: error.details[0].message };
+
+  return { value: parsedData };
+};
 
 const createDrink = asyncHandler(async (req, res) => {
-  const slug = req.body.name.toLowerCase().replace(/[\s_]+/g, "-"); //toLowerCase chuyển sang chữ thường, replace thay thế khoảng trắng và dấu gạch dưới bằng dấu gạch ngang
-  req.body.slug = slug;
-  const drink = await drinkService.createDrink(req.body);
-  res.status(HttpStatusCodes.CREATED.code).json({
-    message: "Create drink successfully, image is processing...",
-    drink,
-  });
   const thumbnailUpload = await uploadService.uploadImage(
     req.files.thumbnail[0],
     {
@@ -33,17 +50,61 @@ const createDrink = asyncHandler(async (req, res) => {
       order: index + 1,
     })),
   };
+  const tagsResult = parseAndValidateArray(req.body.tags, tagsSchema, "Tags");
+  if (tagsResult.error)
+    return res.status(400).json({ message: tagsResult.error });
+  req.body.tags = tagsResult.value;
+  const customizationResult = parseAndValidateArray(
+    req.body.customization,
+    customizationSchema,
+    "Customization"
+  );
+  if (customizationResult.error)
+    return res.status(400).json({ message: customizationResult.error });
+  req.body.customization = customizationResult.value;
+  const ingredientsResult = parseAndValidateArray(
+    req.body.ingredients,
+    ingredientsSchema,
+    "Ingredients"
+  );
+  if (ingredientsResult.error)
+    return res.status(400).json({ message: ingredientsResult.error });
+  req.body.ingredients = ingredientsResult.value;
+
+  const slug = req.body.name.toLowerCase().replace(/[\s_]+/g, "-"); //toLowerCase chuyển sang chữ thường, replace thay thế khoảng trắng và dấu gạch dưới bằng dấu gạch ngang
+  req.body.slug = slug;
+  const drink = await drinkService.createDrink(req.body);
+  res.status(HttpStatusCodes.CREATED.code).json({
+    message: "Create drink successfully, image is processing...",
+    drink,
+  });
+
   const newDrink = await drinkService.updateDrink(drink._id, newDrinkData);
   return newDrink;
 });
 const updateDrink = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
+  // Chuyển đổi dữ liệu từ string sang array nếu cần
+  if (typeof req.body.tags === "string") {
+    req.body.tags = JSON.parse(req.body.tags);
+  }
+
+  if (typeof req.body.customization === "string") {
+    req.body.customization = JSON.parse(req.body.customization);
+  }
+
+  if (typeof req.body.ingredients === "string") {
+    req.body.ingredients = JSON.parse(req.body.ingredients);
+  }
+  console.log("data drink update", req.body);
   const updatedDrink = await drinkService.updateDrink(id, req.body);
   return res.status(HttpStatusCodes.OK.code).json({
     message: "Drink updated successfully",
     updatedDrink,
   });
 });
+
 const getAllDrinks = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;

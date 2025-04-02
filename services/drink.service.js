@@ -4,11 +4,6 @@ const uploadService = require("./upload.service");
 const agenda = require("../config/agenda.config");
 
 const createDrink = async (drinkData, thumbnailFile, imageFiles) => {
-  const existingDrink = await drinkRepo.findDrinkByName(drinkData.name);
-  if (existingDrink) {
-    throw new BadRequest("Drink with this name already exists.");
-  }
-
   const newDrink = await drinkRepo.createDrink(drinkData);
   await agenda.schedule("in 7 days", "set isNew to false", {
     id: newDrink._id,

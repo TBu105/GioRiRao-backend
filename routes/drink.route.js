@@ -4,27 +4,25 @@ const validate = require("../middlewares/validation.middleware");
 const verifyAccessToken = require("../middlewares/verify.access.token.middleware");
 const { uploadDisk } = require("../config/multer.config");
 const authorize = require("../middlewares/authorize.middleware");
-const {
-  createDrinkSchema,
-  updateDrinkSchema,
-} = require("../validations/drink.validation");
+const { createDrinkSchema } = require("../validations/drink.validation");
 
 const router = express.Router();
 
 router.get("/categories", drinkController.getCategories);
 router.get("/search", drinkController.getDrinkByName);
 
-router.put(
+router.patch(
   "/delete/:id",
-  verifyAccessToken,
-  authorize(["admin"]),
+  //verifyAccessToken,
+  //authorize(["admin"]),
   drinkController.deleteDrink
 );
 
-router.put(
+router.patch(
   "/:id",
-  verifyAccessToken,
-  authorize(["admin"]),
+  //verifyAccessToken,
+  //(["admin"]),
+
   drinkController.updateDrink
 );
 
