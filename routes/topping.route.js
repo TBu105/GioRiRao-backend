@@ -20,5 +20,7 @@ router.get(
   //   authorize(["admin"]),
   toppingController.getAllToppings
 );
+router.put("/:id", toppingController.updateTopping);
+router.put("/delete/:id", toppingController.deleteTopping);
 
 module.exports = router;

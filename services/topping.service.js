@@ -30,13 +30,13 @@ const createTopping = async (data) => {
   return newTopping;
 };
 
-const updateTopping = async (query, data) => {
+const updateTopping = async (id, data) => {
   /**
    * Logic:
    * không cần kiểm tra gì, tiến hành gọi db và update dữ liệu luôn
    */
 
-  const updatedTopping = await toppingRepository.updateTopping(query, data);
+  const updatedTopping = await toppingRepository.updateTopping(id, data);
 
   if (!updatedTopping) {
     throw new InternalServerError("Fail to update topping");
@@ -50,8 +50,12 @@ const getAllToppings = async () => {
 
   return toppings;
 };
+const deleteTopping = async (id) => {
+  return await Topping.findByIdAndUpdate(id, { deleted: true }, { new: true });
+};
 
 module.exports = {
+  deleteTopping,
   createTopping,
   updateTopping,
   getAllToppings,

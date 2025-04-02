@@ -16,16 +16,13 @@ const findTopping = async (data) => {
   return topping;
 };
 
-const updateTopping = async (query, data) => {
-  const updatedTopping = await Topping.findOneAndUpdate(query, data, {
-    new: true,
-  });
-
-  return updatedTopping;
+const updateTopping = async (id, data) => {
+  console.log("data update", data);
+  return await Topping.findOneAndUpdate({ _id: id }, data, { new: true });
 };
 
 const getAllToppings = async () => {
-  const toppings = await Topping.find({});
+  const toppings = await Topping.find({ deleted: false });
 
   return toppings;
 };
