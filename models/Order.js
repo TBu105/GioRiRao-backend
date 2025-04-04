@@ -59,6 +59,12 @@ const OrderDetailSchema = new mongoose.Schema({
 
 const OrderSchema = new mongoose.Schema(
   {
+    // Mã hóa đơn
+    code: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     // Người tạo hóa đơn
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
@@ -71,21 +77,17 @@ const OrderSchema = new mongoose.Schema(
       required: [true, "Please provide store id"],
     },
     items: [OrderDetailSchema],
-    onlineStatus: {
+    // Trạng thái hóa đơn
+    status: {
       type: String,
-      enum: [
-        "PENDING",
-        "CONFIRMED",
-        "PREPARING",
-        "READY",
-        "DELIVERED",
-        "CANCELLED",
-      ],
+      required: true,
+      enum: ["PENDING", "COMPLETED", "CANCELLED"],
+      default: "PENDING",
     },
     paymentMethod: {
       type: String,
       required: true,
-      enum: ["Cash", "CARD", "MOBILE_PAYMENT"],
+      enum: ["Cash", "MOBILE_PAYMENT"],
       default: "Cash",
     },
     total: {
