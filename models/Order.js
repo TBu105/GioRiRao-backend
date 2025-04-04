@@ -3,59 +3,65 @@ const mongoose = require("mongoose");
 const DOCUMENT_NAME = "Order";
 const COLLECTION_NAME = "Orders";
 
-const ToppingOrderDetailSchema = new mongoose.Schema({
-  toppingId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Topping",
-    required: true,
+const ToppingOrderDetailSchema = new mongoose.Schema(
+  {
+    toppingId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Topping",
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
   },
-  name: {
-    type: String,
-    required: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-});
+  { _id: false }
+);
 
-const OrderDetailSchema = new mongoose.Schema({
-  drinkId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Drink",
-    required: true,
+const OrderDetailSchema = new mongoose.Schema(
+  {
+    drinkId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Drink",
+      required: true,
+    },
+    drinkName: {
+      type: String,
+      required: true,
+    },
+    drinkPrice: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
+    size: {
+      type: String,
+      required: true,
+      enum: ["S", "M", "L"], // You can customize this
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+    note: {
+      type: String,
+      trim: true,
+    },
+    toppings: [ToppingOrderDetailSchema],
+    total: {
+      type: Number,
+      required: true,
+      min: 0,
+    },
   },
-  drinkName: {
-    type: String,
-    required: true,
-  },
-  drinkPrice: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  size: {
-    type: String,
-    required: true,
-    enum: ["S", "M", "L"], // You can customize this
-  },
-  quantity: {
-    type: Number,
-    required: true,
-    min: 1,
-  },
-  note: {
-    type: String,
-    trim: true,
-  },
-  toppings: [ToppingOrderDetailSchema],
-  total: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-});
+  { _id: false }
+);
 
 const OrderSchema = new mongoose.Schema(
   {

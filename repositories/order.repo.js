@@ -34,26 +34,35 @@ const updateOrderStatusToComplete = async (orderId, status) => {
 };
 
 const getPendingOrdersByStoreandDate = async (storeId) => {
-      // Get start and end of today
-      const startOfDay = new Date();
-      startOfDay.setHours(0, 0, 0, 0);
-  
-      const endOfDay = new Date();
-      endOfDay.setHours(23, 59, 59, 999);
+  // Get start and end of today
+  const startOfDay = new Date();
+  startOfDay.setHours(0, 0, 0, 0);
 
-      
-    const pendingOrders = await Order.find({
-      storeId,
-      status: "PENDING",
-      createdAt: { $gte: startOfDay, $lte: endOfDay }
-    }).sort({ createdAt: 1 });
+  const endOfDay = new Date();
+  endOfDay.setHours(23, 59, 59, 999);
 
-    return pendingOrders;
-}
+  const pendingOrders = await Order.find({
+    storeId,
+    status: "PENDING",
+    createdAt: { $gte: startOfDay, $lte: endOfDay },
+  }).sort({ createdAt: 1 });
 
+  return pendingOrders;
+};
+
+const getOrderDetail = async (orderId) => {
+  const orderDetail = await Order.findById({ _id: orderId, status: "PENDING" });
+
+  if (!orderDetail) {
+    throw new NotFound("Order not found");
+  }
+
+  return orderDetail;
+};
 
 module.exports = {
   createOrder,
   updateOrderStatusToComplete,
   getPendingOrdersByStoreandDate,
+  getOrderDetail,
 };

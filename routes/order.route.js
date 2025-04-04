@@ -7,6 +7,7 @@ const router = express.Router();
 router.post("/", orderController.createOrder);
 
 router.patch("/:id", orderController.updateOrderStatusToComplete);
+router.get("/:id", orderController.getOrderDetail);
 
 router.get("/pending-orders/:storeId", orderController.getPendingOrdersByStoreandDate);
 

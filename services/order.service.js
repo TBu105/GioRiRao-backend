@@ -33,20 +33,34 @@ const createOrder = async (orderData) => {
 
 const updateOrderStatusToComplete = async (orderId) => {
   const status = "COMPLETED";
-  const order = await orderRepository.updateOrderStatusToComplete(orderId, status);
+  const order = await orderRepository.updateOrderStatusToComplete(
+    orderId,
+    status
+  );
 
   return order;
 };
 
-const getPendingOrdersByStoreandDate = async (orderId) => {
+const getPendingOrdersByStoreandDate = async (storeId) => {
   // Get peding order by storeId, and by now
-  const pendingOrder = await orderRepository.getPendingOrdersByStoreandDate(orderId);
+  const pendingOrder = await orderRepository.getPendingOrdersByStoreandDate(
+    storeId
+  );
 
   return pendingOrder;
+};
+
+const getOrderDetail = async (orderId) => {
+  const orderDetail = await orderRepository.getOrderDetail(
+    orderId
+  );
+
+  return orderDetail;
 };
 
 module.exports = {
   createOrder,
   updateOrderStatusToComplete,
-  getPendingOrdersByStoreandDate
+  getPendingOrdersByStoreandDate,
+  getOrderDetail
 };

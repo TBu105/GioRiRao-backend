@@ -29,8 +29,18 @@ const getPendingOrdersByStoreandDate = asyncHandler(async (req, res) => {
   });
 });
 
+const getOrderDetail = asyncHandler(async (req, res) => {
+  const order = await orderService.getOrderDetail(req.params.id);
+
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Get order detail successfully",
+    order,
+  });
+});
+
 module.exports = {
   createOrder,
   updateOrderStatusToComplete,
-  getPendingOrdersByStoreandDate
+  getPendingOrdersByStoreandDate,
+  getOrderDetail
 };

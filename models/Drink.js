@@ -14,6 +14,7 @@ const DrinkSchema = new mongoose.Schema(
     },
     customization: [
       {
+        _id: false,
         size: {
           type: String,
           required: [true, "Please provide drink size"],
@@ -44,15 +45,9 @@ const DrinkSchema = new mongoose.Schema(
     thumbnail: {
       type: String,
     },
-    images: [
-      {
-        url: String,
-        alt: String,
-        order: Number,
-      },
-    ],
     ingredients: [
       {
+        _id: false,
         name: String,
         quantity: String,
         unit: String,
