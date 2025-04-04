@@ -1,6 +1,9 @@
 const orderRepository = require("../repositories/order.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 const mongoose = require("mongoose");
+const {
+  default: generateOrderCode,
+} = require("../utils/generate.order.code.util");
 
 const createOrder = async (orderData) => {
   const session = await mongoose.startSession();
@@ -12,11 +15,14 @@ const createOrder = async (orderData) => {
       throw new BadRequest("Order must have at least one drink");
     }
 
-    const newOrder = await orderRepository.createOrder(orderData, session)
+    orderData.code = generateOrderCode();
+    orderData.status = "PENDING";
+
+    const newOrder = await orderRepository.createOrder(orderData, session);
 
     await session.commitTransaction();
 
-    return newOrder
+    return newOrder;
   } catch (error) {
     await session.abortTransaction();
     throw error;
