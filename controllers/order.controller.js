@@ -11,6 +11,26 @@ const createOrder = asyncHandler(async (req, res) => {
   });
 });
 
+const updateOrderStatusToComplete = asyncHandler(async (req, res) => {
+  const order = await orderService.updateOrderStatusToComplete(req.params.id);
+
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Update order status to COMPLETED successfully",
+    order,
+  });
+});
+
+const getPendingOrdersByStoreandDate = asyncHandler(async (req, res) => {
+  const order = await orderService.getPendingOrdersByStoreandDate(req.params.storeId);
+
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Get all pending orders successfully",
+    order,
+  });
+});
+
 module.exports = {
   createOrder,
+  updateOrderStatusToComplete,
+  getPendingOrdersByStoreandDate
 };

@@ -63,7 +63,6 @@ const OrderSchema = new mongoose.Schema(
     code: {
       type: String,
       required: true,
-      unique: true,
     },
     // Người tạo hóa đơn
     createdBy: {

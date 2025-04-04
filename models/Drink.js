@@ -40,7 +40,6 @@ const DrinkSchema = new mongoose.Schema(
     slug: {
       type: String,
       // required: [true, "Please provide drink slug"],
-      index: true,
     },
     thumbnail: {
       type: String,
@@ -73,7 +72,7 @@ const DrinkSchema = new mongoose.Schema(
       required: [true, "Please provide drink category"],
       enum: ["coffee", "tea", "smoothie", "juice", "others"],
     },
-    tags: [{ type: String, index: true }],
+    tags: [{ type: String }],
     // indication of whether data has been deleted or not
     deleted: {
       type: Boolean,
@@ -85,8 +84,5 @@ const DrinkSchema = new mongoose.Schema(
     collection: COLLECTION_NAME,
   }
 );
-
-// Indexes for performance
-DrinkSchema.index({ name: "text" });
 
 module.exports = mongoose.model(DOCUMENT_NAME, DrinkSchema);

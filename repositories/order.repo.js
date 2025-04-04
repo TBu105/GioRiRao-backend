@@ -1,3 +1,4 @@
+const { NotFound } = require("../config/error.response.config");
 const Order = require("../models/Order");
 const mongoose = require("mongoose");
 
@@ -18,6 +19,41 @@ const createOrder = async (data, session) => {
   await order.save({ session });
 };
 
+const updateOrderStatusToComplete = async (orderId, status) => {
+  const order = await Order.findByIdAndUpdate(
+    orderId,
+    { status },
+    { new: true }
+  );
+
+  if (!order) {
+    throw new NotFound("Order not found");
+  }
+
+  return order;
+};
+
+const getPendingOrdersByStoreandDate = async (storeId) => {
+      // Get start and end of today
+      const startOfDay = new Date();
+      startOfDay.setHours(0, 0, 0, 0);
+  
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+
+      
+    const pendingOrders = await Order.find({
+      storeId,
+      status: "PENDING",
+      createdAt: { $gte: startOfDay, $lte: endOfDay }
+    }).sort({ createdAt: 1 });
+
+    return pendingOrders;
+}
+
+
 module.exports = {
   createOrder,
+  updateOrderStatusToComplete,
+  getPendingOrdersByStoreandDate,
 };
