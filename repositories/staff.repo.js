@@ -10,13 +10,13 @@ const findStaff = async (data) => {
   return staff;
 };
 
-const findStaffById = async (id) => {
-  const staff = await Staff.findById(id);
+const findStaffById = async (staffId) => {
+  const staff = await Staff.findById(staffId, { deleted: false });
   return staff;
 };
 
-const updateStaff = async (staffId, data) => {
-  const updatedStaff = await Staff.findByIdAndUpdate(staffId, data, {
+const updateStaff = async (staffId, staffData) => {
+  const updatedStaff = await Staff.findByIdAndUpdate(staffId, staffData, {
     new: true,
   });
 
