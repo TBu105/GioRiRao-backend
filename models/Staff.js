@@ -46,8 +46,7 @@ const StaffSchema = new mongoose.Schema(
       type: String,
       enum: [
         "admin",
-        "managerStore",
-        "staffShipper",
+        "storeManager",
         "staffCashier",
         "staffBarista",
         "staffWaiter",

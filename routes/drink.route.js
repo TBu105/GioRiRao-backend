@@ -35,7 +35,7 @@ router.post(
   "/",
   uploadDisk.fields([
     { name: "thumbnail", maxCount: 1 }, // Chỉ chấp nhận 1 file cho 'thumbnail'
-    { name: "images", maxCount: 10 }, // Chấp nhận tối đa 10 file cho 'images'
+    // { name: "images", maxCount: 10 }, // Chấp nhận tối đa 10 file cho 'images'
   ]),
   validate(createDrinkSchema),
   drinkController.createDrink

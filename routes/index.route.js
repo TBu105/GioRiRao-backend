@@ -8,5 +8,6 @@ router.use("/auth", require("./auth.route"));
 router.use("/toppings", require("./topping.route"));
 router.use("/drinks", require("./drink.route"));
 router.use("/orders", require("./order.route"));
+router.use("/staffs", require("./staff.route"));
 
 module.exports = router;
