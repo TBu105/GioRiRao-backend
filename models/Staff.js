@@ -47,11 +47,16 @@ const StaffSchema = new mongoose.Schema(
       enum: [
         "admin",
         "storeManager",
+        "staffShipper",
         "staffCashier",
         "staffBarista",
         "staffWaiter",
       ],
       required: true,
+    },
+    deleted: {
+      type: Boolean,
+      default: false,
     },
   },
   {

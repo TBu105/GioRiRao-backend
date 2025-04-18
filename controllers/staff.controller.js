@@ -2,31 +2,33 @@ const staffService = require("../services/staff.service");
 const asyncHandler = require("../utils/async.handler.util");
 const HttpStatusCodes = require("../config/http.status.config");
 const uploadService = require("../services/upload.service");
+const { hashPassword } = require("../utils/check.password.util");
 
 const createStaff = asyncHandler(async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: "Please provide staff image" });
   }
 
-  // Tạo promise upload ảnh
-  const uploadPromise = uploadService.uploadImage(req.file, {
+  const { password } = req.body;
+  if (!password) {
+    return res.status(400).json({ message: "Password is required" });
+  }
+
+  // Upload ảnh trước
+  // Hash password
+  req.body.password = await hashPassword(password);
+
+  // Tạo staff với thông tin ban đầu (chưa có ảnh)
+  const newStaff = await staffService.createStaff(req.body);
+  const staffThumbnail = await uploadService.uploadImage(req.file, {
     folderName: "staffThumbnails",
     imgHeight: 300,
     imgWidth: 300,
   });
-
-  // Tạo promise tạo staff (chưa có ảnh)
-  const createStaffPromise = staffService.createStaff(req.body);
-
-  // Chạy song song
-  const [staffThumbnail, newStaff] = await Promise.all([
-    uploadPromise,
-    createStaffPromise,
-  ]);
-
-  // Cập nhật staff với đường dẫn ảnh
+  console.log("staffThumbnail", staffThumbnail);
+  // Cập nhật ảnh đại diện cho staff vừa tạo
   const updatedStaff = await staffService.updateStaff(newStaff._id, {
-    thumbnail: staffThumbnail.photoUrl,
+    avatar: staffThumbnail.photoUrl,
   });
 
   res.status(HttpStatusCodes.CREATED.code).json({

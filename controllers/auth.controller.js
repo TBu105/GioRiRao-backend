@@ -38,7 +38,6 @@ const signUpAdmin = asyncHandler(async (req, res) => {
 
 // chưa hoàn thành, chưa có validation
 const signUpStaff = asyncHandler(async (req, res) => {
-  req.body.managerId = req.user.userId;
   const staff = await authService.signUpStaff(req.body);
 
   if (!req.file) {
@@ -71,13 +70,6 @@ const signUpStaff = asyncHandler(async (req, res) => {
 const loginStaff = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const token = await authService.loginStaff(email, password);
-
-  res.cookie("refreshToken", token.refreshToken, {
-    httpOnly: true, // Prevents access via JavaScript
-    secure: true, // Ensures cookies are sent over HTTPS
-    sameSite: "Strict", // Prevents cross-site request forgery
-    maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie lifespan (1 week)
-  });
 
   res.cookie("refreshToken", token.refreshToken, {
     httpOnly: true, // Prevents access via JavaScript

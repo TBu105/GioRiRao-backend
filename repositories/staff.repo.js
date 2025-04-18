@@ -11,12 +11,12 @@ const findStaff = async (data) => {
 };
 
 const findStaffById = async (id) => {
-  const staff = await Staff.findById(id).lean();
+  const staff = await Staff.findById(id);
   return staff;
 };
 
-const updateStaff = async (staffId, data) => {
-  const updatedStaff = await Staff.findByIdAndUpdate(staffId, data, {
+const updateStaff = async (staffId, staffData) => {
+  const updatedStaff = await Staff.findByIdAndUpdate(staffId, staffData, {
     new: true,
   });
 

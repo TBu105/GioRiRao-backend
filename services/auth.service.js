@@ -26,13 +26,6 @@ const signUpAdmin = async (data) => {
 
 // auth-signUpStaff
 const signUpStaff = async (data) => {
-  console.log("data ", data.managerId);
-  console.log("data ", typeof data.managerId);
-
-  // const [existingStaff, store] = await Promise.all([
-  //   staffRepository.findStaff({ email: data.email }),
-  //   storeRepository.findStore({ managerId: data.managerId }),
-  // ]);
 
   const existingStaff = await staffRepository.findStaff({ email: data.email });
 
@@ -47,9 +40,6 @@ const signUpStaff = async (data) => {
   data.password = hashedPassword;
 
   const newStaff = await staffRepository.signUpStaff(data);
-
-  console.log("newStaff", newStaff);
-  console.log("store", store);
 
   await storeRepository.updateStoreStaff(store._id, newStaff._id);
 

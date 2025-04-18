@@ -44,7 +44,10 @@ const updateStaff = asyncHandler(async (req, res) => {
   });
 });
 const deleteStaff = asyncHandler(async (req, res) => {
-  const store = await storeService.deleteStaffs(req.params.id, req.body.staffs);
+  const store = await storeService.deleteStaff(
+    req.params.storeId,
+    req.body.staffIds
+  );
   return res.status(HttpStatusCodes.OK.code).json({
     message: "Store staff deleted successfully",
     store,
@@ -59,12 +62,54 @@ const getStoresByAreaId = asyncHandler(async (req, res) => {
   });
 });
 
+const getStaffsOfTheStore = asyncHandler(async (req, res) => {
+  const store = await storeService.getStaffsOfTheStore(req.params.id);
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Get list of store's staffs successfully",
+    store,
+  });
+});
+
+const addManagerToStore = asyncHandler(async (req, res) => {
+  const { managerId } = req.body;
+  const store = await storeService.addManagerToStore(
+    req.params.storeId,
+    managerId
+  );
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Update store manager successfully",
+    store,
+  });
+});
+
+const addStaffToStore = asyncHandler(async (req, res) => {
+  const { staffId } = req.body;
+  const store = await storeService.addStaffToStore(req.params.storeId, staffId);
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Update store's staff successfully",
+    store,
+  });
+});
+
+const changeStaffRole = asyncHandler(async (req, res) => {
+  const { staffs } = req.body; // [{staffId, role}]
+  const store = await storeService.changeStaffRole(req.params.storeId, staffs);
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Update staff's role successfully",
+    store,
+  });
+});
+
 module.exports = {
   createStore,
   updateStore,
   updateManager,
   getStoresByAreaId,
   updateStaff,
-  getStoreById,
   deleteStaff,
+  getStoreById,
+  addManagerToStore,
+  addStaffToStore,
+  getStaffsOfTheStore,
+  changeStaffRole,
 };

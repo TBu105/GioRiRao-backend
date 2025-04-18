@@ -23,8 +23,7 @@ const createStaff = async (data) => {
 };
 // staff-updateStaff
 const updateStaff = async (staffId, data) => {
-  console.log("req.user");
-
+  console.log("data", data);
   const existingStaff = await staffRepository.findStaffById(staffId);
 
   if (!existingStaff) {
@@ -35,28 +34,23 @@ const updateStaff = async (staffId, data) => {
 
   return updatedStaff;
 };
-const getStaffById = async (staffId) => {
-  const existingStaff = await staffRepository.findStaffById(staffId);
-
-  if (!existingStaff) {
-    throw new BadRequest("Staff account not found.");
-  }
-
-  return existingStaff;
-};
-
 const getAllStaff = async () => {
   const staff = await staffRepository.findAllStaff();
 
   if (!staff) {
-    throw new BadRequest("Staff account not found.");
+    throw new BadRequest("Staff not found.");
   }
 
   return staff;
 };
-const deleteStaff = async (staffId) => {
-  const existingStaff = await staffRepository.deleteStaff(staffId);
-  return existingStaff;
+const getStaffById = async (staffId) => {
+  const staff = await staffRepository.findStaffById(staffId);
+
+  if (!staff) {
+    throw new BadRequest("Staff not found.");
+  }
+
+  return staff;
 };
 
 module.exports = {
@@ -64,5 +58,4 @@ module.exports = {
   createStaff,
   updateStaff,
   getStaffById,
-  deleteStaff,
 };
