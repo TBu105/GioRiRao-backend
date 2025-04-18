@@ -17,7 +17,6 @@ const findTopping = async (data) => {
 };
 
 const updateTopping = async (id, data) => {
-  console.log("data update", data);
   return await Topping.findOneAndUpdate({ _id: id }, data, { new: true });
 };
 

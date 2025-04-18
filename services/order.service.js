@@ -1,10 +1,7 @@
 const orderRepository = require("../repositories/order.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 const mongoose = require("mongoose");
-const {
-  default: generateOrderCode,
-} = require("../utils/generate.order.code.util");
-
+const generateOrderCode = require("../utils/generate.order.code.util");
 const createOrder = async (orderData) => {
   const session = await mongoose.startSession();
 
@@ -17,11 +14,8 @@ const createOrder = async (orderData) => {
 
     orderData.code = generateOrderCode();
     orderData.status = "PENDING";
-
     const newOrder = await orderRepository.createOrder(orderData, session);
-
     await session.commitTransaction();
-
     return newOrder;
   } catch (error) {
     await session.abortTransaction();
@@ -29,6 +23,13 @@ const createOrder = async (orderData) => {
   } finally {
     session.endSession();
   }
+};
+const getOrderByCode = async (code) => {
+  const order = await orderRepository.getOrderByCode(code);
+  if (!order) {
+    throw new NotFound("Order not found");
+  }
+  return order;
 };
 
 const updateOrderStatusToComplete = async (orderId) => {
@@ -51,16 +52,15 @@ const getPendingOrdersByStoreandDate = async (storeId) => {
 };
 
 const getOrderDetail = async (orderId) => {
-  const orderDetail = await orderRepository.getOrderDetail(
-    orderId
-  );
+  const orderDetail = await orderRepository.getOrderDetail(orderId);
 
   return orderDetail;
 };
 
 module.exports = {
+  getOrderByCode,
   createOrder,
   updateOrderStatusToComplete,
   getPendingOrdersByStoreandDate,
-  getOrderDetail
+  getOrderDetail,
 };

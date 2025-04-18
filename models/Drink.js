@@ -45,6 +45,13 @@ const DrinkSchema = new mongoose.Schema(
     thumbnail: {
       type: String,
     },
+    // images: [
+    //   {
+    //     url: String,
+    //     alt: String,
+    //     order: Number,
+    //   },
+    // ],
     ingredients: [
       {
         _id: false,

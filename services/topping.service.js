@@ -51,7 +51,11 @@ const getAllToppings = async () => {
   return toppings;
 };
 const deleteTopping = async (id) => {
-  return await Topping.findByIdAndUpdate(id, { deleted: true }, { new: true });
+  return await toppingRepository.updateTopping(
+    id,
+    { deleted: true },
+    { new: true }
+  );
 };
 
 module.exports = {
