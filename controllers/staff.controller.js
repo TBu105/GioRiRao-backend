@@ -88,8 +88,7 @@ const updateStaff = asyncHandler(async (req, res) => {
 const deleteStaff = asyncHandler(async (req, res) => {
   try {
     const staffId = req.params.id;
-    const deletedStaff = await staffService.deleteStaff(staffId);
-
+    const deletedStaff = await staffService.deleteStaff(req.body.data, staffId);
     if (!deletedStaff) {
       return res.status(404).json({ message: "Staff not found" });
     }

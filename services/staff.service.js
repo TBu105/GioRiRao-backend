@@ -1,5 +1,6 @@
 const staffRepository = require("../repositories/staff.repo");
 const { BadRequest } = require("../config/error.response.config");
+const { deleteStaff } = require("./store.service");
 
 const createStaff = async (data) => {
   /**
@@ -58,4 +59,5 @@ module.exports = {
   createStaff,
   updateStaff,
   getStaffById,
+  deleteStaff,
 };

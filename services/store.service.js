@@ -85,20 +85,24 @@ const updateStaff = async (storeId, staffIds) => {
 };
 
 const deleteStaff = async (storeId, staffIds) => {
+  // đảm bảo staffIds là mảng
+  const ids = Array.isArray(staffIds) ? staffIds : [staffIds];
+
   const store = await storeRepository.findStoreById(storeId);
   if (!store) {
     throw new NotFound("Store not found.");
   }
-  // Lọc danh sách staff hiện tại, loại bỏ staff cần xóa
+
   const updatedStaffs = store.staffs.filter(
-    (staff) => !staffIds.includes(staff.toString())
+    (staff) => !ids.includes(staff.toString())
   );
 
-  for (const staffId of staffIds) {
-    await staffRepository.updateStaff(staffId, { deleted: true });
-  }
+  await Promise.all(
+    ids.map((staffId) =>
+      staffRepository.updateStaff(staffId, { deleted: true })
+    )
+  );
 
-  // Cập nhật lại danh sách staffs
   return await storeRepository.updateStore(storeId, { staffs: updatedStaffs });
 };
 
