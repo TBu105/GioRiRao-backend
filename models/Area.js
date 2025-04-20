@@ -16,10 +16,6 @@ const AreaSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "City", // Reference to the City model
     },
-    totalStores: {
-      type: Number,
-      default: 0,
-    },
     // indication of whether data has been deleted or not
     deleted: {
       type: Boolean,

@@ -20,6 +20,8 @@ const updateStaff = async (staffId, staffData) => {
     new: true,
   });
 
+  console.log("updatedStaff", updatedStaff);
+
   return updatedStaff;
 };
 
@@ -29,3 +31,7 @@ module.exports = {
   findStaffById,
   updateStaff,
 };
+
+/**
+ * Khi người dùng đăng nhập, làm sao
+ */

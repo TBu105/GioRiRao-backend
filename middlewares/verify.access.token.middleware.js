@@ -7,7 +7,7 @@ const verifyAccessToken = (req, res, next) => {
   if (!token) {
     return res
       .status(HttpStatusCodes.UNAUTHORIZED.code)
-      .json({ message: "Access token is required" });
+      .json({ message: "Access token is invalid" });
   }
 
   try {
@@ -22,11 +22,11 @@ const verifyAccessToken = (req, res, next) => {
     // err
     if (err.name === "TokenExpiredError") {
       return res
-        .status(HttpStatusCodes.FORBIDDEN.code)
-        .json({ message: "Access token expired" });
+        .status(HttpStatusCodes.UNAUTHORIZED.code)
+        .json({ message: "Access token is invalid" });
     } else if (err) {
       return res
-        .status(HttpStatusCodes.FORBIDDEN.code)
+        .status(HttpStatusCodes.UNAUTHORIZED.code)
         .json({ message: "Access token is invalid" });
     }
   }

@@ -31,6 +31,9 @@ router.post(
   authController.signUpStaff
 );
 
-router.post("/admin/login", authController.loginStaff);
+router.post("/login", authController.loginStaff);
+router.get("/me", verifyAccessToken, authController.getMeInfo);
+router.get("/verify", verifyAccessToken, authController.isUserLogin);
+router.post("/logout", verifyAccessToken, authController.logOut);
 
 module.exports = router;

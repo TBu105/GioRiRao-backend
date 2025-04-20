@@ -98,9 +98,53 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     .json({ message: "Refresh access token successfully", newAccessToken });
 });
 
+const getMeInfo = asyncHandler(async (req, res) => {
+  const { userId, role, storeId } = req.user;
+
+  const me = {
+    userId,
+    role,
+    storeId,
+  };
+
+  return res
+    .status(HttpStatusCodes.OK.code)
+    .json({ message: "Get me information successfully", me });
+});
+
+const isUserLogin = asyncHandler(async (req, res) => {
+  const isAuth = await authService.getStaffInfo(req.user.userId);
+
+  return res
+    .status(HttpStatusCodes.OK.code)
+    .json({ message: "Verify authentication successfully", isAuth });
+});
+
+const logOut = asyncHandler(async (req, res) => {
+  const logOut = await authService.logOut(req.user.userId);
+
+  // Xóa cookies phía client
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+  });
+
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "Strict",
+  });
+
+  return res.status(HttpStatusCodes.OK.code).json({ message: logOut });
+});
+
 module.exports = {
   signUpAdmin,
   signUpStaff,
   loginStaff,
   refreshAccessToken,
+  getMeInfo,
+  isUserLogin,
+  logOut,
 };

@@ -19,16 +19,6 @@ const createStore = async (storeData) => {
   // Tạo store mới
   const store = await storeRepository.createStore(storeData);
 
-  // Tăng `totalStores` trong Area lên 1
-  await areaRepository.updateArea(areaId, {
-    $inc: { totalStores: 1 },
-  });
-
-  // Tăng `totalStores` trong City lên 1
-  await cityRepository.updateCityById(area.cityId, {
-    $inc: { totalStores: 1 },
-  });
-
   return store;
 };
 

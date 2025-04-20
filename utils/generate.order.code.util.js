@@ -15,6 +15,4 @@ function generateOrderCode() {
   return orderCode;
 }
 
-generateOrderCode();
-
-export default generateOrderCode;
+module.exports = generateOrderCode;
