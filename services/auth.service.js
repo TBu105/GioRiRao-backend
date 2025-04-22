@@ -26,7 +26,6 @@ const signUpAdmin = async (data) => {
 
 // auth-signUpStaff
 const signUpStaff = async (data) => {
-
   const existingStaff = await staffRepository.findStaff({ email: data.email });
 
   const store = await storeRepository.findStore({ managerId: data.managerId });
@@ -53,9 +52,11 @@ const loginStaff = async (email, password) => {
     throw new BadRequest("Invalid email or password.");
   }
 
-  const [match] = await Promise.all([
+  const [match, _updatedStaff, _revokedTokens, store] = await Promise.all([
     bcrypt.compare(password, staff.password),
+    staffRepository.updateStaff(staff._id, { isAuthenticated: true }),
     refreshTokenRepository.revokeRefreshToken({ userId: staff._id }),
+    storeRepository.getStoreStaffWorkIn(staff._id),
   ]);
 
   if (!match) {
@@ -65,6 +66,7 @@ const loginStaff = async (email, password) => {
   let payload = {
     userId: staff._id,
     role: staff.role,
+    // storeId: store._id,
   };
 
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -85,6 +87,8 @@ const loginStaff = async (email, password) => {
     newRefreshToken
   );
 
+  console.log("savedRefreshToken", savedRefreshToken);
+
   const token = {
     accessToken,
     refreshToken: savedRefreshToken.refreshToken,
@@ -93,8 +97,23 @@ const loginStaff = async (email, password) => {
   return token;
 };
 
+const getStaffInfo = async (userId) => {
+  const staff = await staffRepository.findStaffById(userId);
+
+  return staff.isAuthenticated;
+};
+
+const logOut = async (userId) => {
+  await refreshTokenRepository.revokeRefreshToken({ userId });
+  await staffRepository.updateStaff(userId, { isAuthenticated: false });
+
+  return "Log out ok";
+};
+
 module.exports = {
   signUpAdmin,
   signUpStaff,
   loginStaff,
+  getStaffInfo,
+  logOut,
 };

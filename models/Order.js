@@ -99,6 +99,10 @@ const OrderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    timeFrame: {
+      type: Number,
+      enum: [1,2,3,4]
+    }
   },
   {
     timestamps: true,

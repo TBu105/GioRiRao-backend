@@ -64,10 +64,39 @@ const getOrderDetail = async (orderId) => {
   return orderDetail;
 };
 
+const calculateRevenueByShift = async (storeId, date, timeFrame) => {
+  // 1. Xác định khoảng thời gian bắt đầu và kết thúc của ngày
+  const start = new Date(date);
+  start.setHours(
+    0,
+    start.getMinutes(),
+    start.getSeconds(),
+    start.getMilliseconds()
+  );
+  const end = new Date(date);
+  end.setHours(23, 59, 59, 999);
+
+  const orders = await Order.find({
+    storeId,
+    status: "COMPLETED",
+    timeFrame,
+    createdAt: { $gte: start, $lte: end },
+  });
+
+  if (!orders) {
+    throw new NotFound("Order not found");
+  }
+
+  const totalRevenue = orders.reduce((acc, order) => acc + order.total, 0);
+
+  return totalRevenue;
+};
+
 module.exports = {
   getOrderByCode,
   createOrder,
   updateOrderStatusToComplete,
   getPendingOrdersByStoreandDate,
   getOrderDetail,
+  calculateRevenueByShift,
 };

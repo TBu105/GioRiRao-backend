@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const setupCronJobs = require("./jobs/scheduler");
 
 const app = express();
 
@@ -12,6 +13,8 @@ const NotFound = require("./middlewares/not.found.middleware");
 
 // db
 require("./config/connect.db.config");
+
+setupCronJobs();
 
 // Enable CORS
 app.use(

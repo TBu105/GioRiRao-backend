@@ -57,10 +57,32 @@ const getStaffsOfTheStore = async (storeId) => {
   return store;
 };
 
+const getAllStoreId = async () => {
+  const stores = await Store.find({ deleted: false }, "_id").lean();
+  if (!stores) {
+    throw new Error("Store not found.");
+  }
+  const storeIds = stores.map((store) => store._id.toString());
+  return storeIds;
+};
+
+const getStoreStaffWorkIn = async (staffId) => {
+  const store = await Store.findOne({ staffs: staffId });
+
+  console.log("store", store);
+
+  return store;
+};
+
 const findStoreByName = async (name) => {
   return await Store.findOne({ name }).lean();
 };
+const getStoreByManagerId = async (managerId) => {
+  return await Store.findOne({ managerId }).lean();
+};
+
 module.exports = {
+  getStoreByManagerId,
   getStoreById,
   getStaffsOfTheStore,
   findStoreByName,
@@ -70,5 +92,7 @@ module.exports = {
   findStore,
   findStoreById,
   updateStoreStaff,
-  updateStoreManager,
+  getStaffsOfTheStore,
+  getAllStoreId,
+  getStoreStaffWorkIn,
 };

@@ -8,7 +8,7 @@ const { createDrinkSchema } = require("../validations/drink.validation");
 
 const router = express.Router();
 
-router.get("/categories", drinkController.getCategories);
+router.get("/categories", verifyAccessToken, drinkController.getCategories);
 router.get("/search", drinkController.getDrinkByName);
 
 router.patch(

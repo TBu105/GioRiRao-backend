@@ -35,5 +35,6 @@ router.post("/manager/:storeId", storeController.addManagerToStore);
 router.post("/staff/:storeId", storeController.addStaffToStore);
 router.patch("/staffs/:storeId", storeController.deleteStaff);
 router.patch("/staffs/role/:storeId", storeController.changeStaffRole);
+router.get("/manager/:id", storeController.getStoreByManagerId);
 
 module.exports = router;

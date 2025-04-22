@@ -3,27 +3,14 @@ const cityRepository = require("../repositories/city.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 
 const createArea = async (areaData) => {
-  const [cityExists, existingArea] = await Promise.all([
-    cityRepository.findCityById(areaData.cityId),
-    areaRepository.findAreaByName(areaData.name),
-  ]);
-
-  // Kiểm tra city có tồn tại không
-  if (!cityExists) {
-    throw new NotFound("City does not exist.");
-  }
+  const existingArea = await areaRepository.findAreaByName(areaData.name);
 
   // Kiểm tra area đã tồn tại chưa
   if (existingArea) {
     throw new BadRequest("An area with this name already exists.");
   }
 
-  const [area] = await Promise.all([
-    // Tạo Area
-    areaRepository.createArea(areaData),
-    // Tăng `totalAreas` của City lên 1
-    cityRepository.updateCityById(areaData.cityId, { $inc: { totalAreas: 1 } }),
-  ]);
+  const area = await areaRepository.createArea(areaData);
 
   return area;
 };

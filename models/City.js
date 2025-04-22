@@ -10,14 +10,6 @@ const CitySchema = new mongoose.Schema(
       required: [true, "Please provide city name"],
       unique: [true, "This city name already exist "],
     },
-    totalAreas: {
-      type: Number,
-      default: 0,
-    },
-    totalStores: {
-      type: Number,
-      default: 0,
-    },
     deleted: {
       type: Boolean,
       default: false,

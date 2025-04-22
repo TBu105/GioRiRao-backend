@@ -8,13 +8,18 @@ const createRefreshToken = async (data) => {
 const revokeRefreshToken = async (data) => {
   const query = { ...data, revoked: false };
 
-  const revoke = await RefreshToken.findOneAndUpdate(query, { revoked: true });
+  const revoke = await RefreshToken.findOneAndUpdate(
+    query,
+    { revoked: true },
+    { new: true }
+  );
+  console.log("revoke", revoke);
 
   return revoke;
 };
 
 const getRefreshToken = async (data) => {
-  const query = {...data, revoked: false}
+  const query = { ...data, revoked: false };
 
   const refreshToken = await RefreshToken.findOne(query);
 

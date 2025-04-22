@@ -1,7 +1,9 @@
 const orderRepository = require("../repositories/order.repo");
 const { BadRequest, NotFound } = require("../config/error.response.config");
 const mongoose = require("mongoose");
+const checkOrderTimeFrame = require("../utils/check.order.time.frame.util");
 const generateOrderCode = require("../utils/generate.order.code.util");
+
 const createOrder = async (orderData) => {
   const session = await mongoose.startSession();
 
@@ -12,6 +14,15 @@ const createOrder = async (orderData) => {
       throw new BadRequest("Order must have at least one drink");
     }
 
+    const timeFrame = checkOrderTimeFrame("order");
+
+    if (!timeFrame) {
+      throw new BadRequest(
+        "Can not create order due to time frame is not valid"
+      );
+    }
+
+    orderData.timeFrame = timeFrame;
     orderData.code = generateOrderCode();
     orderData.status = "PENDING";
     const newOrder = await orderRepository.createOrder(orderData, session);

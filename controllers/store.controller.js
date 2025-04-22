@@ -99,8 +99,16 @@ const changeStaffRole = asyncHandler(async (req, res) => {
     store,
   });
 });
+const getStoreByManagerId = asyncHandler(async (req, res) => {
+  const store = await storeService.getStoreByManagerId(req.params.id);
+  return res.status(HttpStatusCodes.OK.code).json({
+    message: "Get store by managerId successfully",
+    store,
+  });
+});
 
 module.exports = {
+  getStoreByManagerId,
   createStore,
   updateStore,
   updateManager,

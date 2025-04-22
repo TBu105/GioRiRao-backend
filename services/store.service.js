@@ -26,16 +26,6 @@ const createStore = async (storeData) => {
   const store = await storeRepository.createStore(storeData);
   // Tạo store mớ
 
-  // Tăng `totalStores` trong Area lên 1
-  await areaRepository.updateArea(areaId, {
-    $inc: { totalStores: 1 },
-  });
-
-  // Tăng `totalStores` trong City lên 1
-  await cityRepository.updateCityById(area.cityId, {
-    $inc: { totalStores: 1 },
-  });
-
   return store;
 };
 
@@ -165,7 +155,24 @@ const changeStaffRole = async (storeId, staffs) => {
   return "Staff roles updated successfully.";
 };
 
+const getStoreByManagerId = async (managerId) => {
+  // Kiểm tra xem manager có tồn tại hay không
+  const manager = await staffRepository.findStaffById(managerId);
+  if (!manager) {
+    throw new NotFound("Manager not found.");
+  }
+
+  // Lấy thông tin store theo managerId
+  const store = await storeRepository.getStoreByManagerId(managerId);
+  if (!store) {
+    throw new NotFound("Store not found for this manager.");
+  }
+
+  return store;
+};
+
 module.exports = {
+  getStoreByManagerId,
   createStore,
   updateStore,
   updateManager,
