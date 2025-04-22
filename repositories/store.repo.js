@@ -55,7 +55,11 @@ const getAllStoreId = async () => {
 const getStoreStaffWorkIn = async (staffId) => {
   const store = await Store.findOne({ staffs: staffId });
 
-  console.log("store", store);
+  return store;
+};
+
+const getStoreManagerWorkIn = async (staffId) => {
+  const store = await Store.findOne({ managerId: staffId });
 
   return store;
 };
@@ -70,4 +74,5 @@ module.exports = {
   getStaffsOfTheStore,
   getAllStoreId,
   getStoreStaffWorkIn,
+  getStoreManagerWorkIn
 };
