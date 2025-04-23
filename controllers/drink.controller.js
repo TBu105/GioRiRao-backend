@@ -36,19 +36,9 @@ const createDrink = asyncHandler(async (req, res) => {
       imgWidth: 300,
     }
   );
-  // const imagesUpload = await uploadService.uploadImages(req.files.images, {
-  //   folderName: "drinkImages",
-  //   imgHeight: 600,
-  //   imgWidth: 600,
-  // });
 
   const newDrinkData = {
     thumbnail: thumbnailUpload.photoUrl,
-    // images: imagesUpload.photosUrl.map((url, index) => ({
-    //   url,
-    //   alt: `image ${index + 1}`,
-    //   order: index + 1,
-    // })),
   };
   const tagsResult = parseAndValidateArray(req.body.tags, tagsSchema, "Tags");
   if (tagsResult.error)
@@ -97,6 +87,10 @@ const updateDrink = asyncHandler(async (req, res) => {
   if (typeof req.body.ingredients === "string") {
     req.body.ingredients = JSON.parse(req.body.ingredients);
   }
+  const tagsResult = parseAndValidateArray(req.body.tags, tagsSchema, "Tags");
+  if (tagsResult.error)
+    return res.status(400).json({ message: tagsResult.error });
+  req.body.tags = tagsResult.value;
   console.log("data drink update", req.body);
   const updatedDrink = await drinkService.updateDrink(id, req.body);
   return res.status(HttpStatusCodes.OK.code).json({
