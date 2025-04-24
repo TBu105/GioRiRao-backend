@@ -52,22 +52,30 @@ const loginStaff = async (email, password) => {
     throw new BadRequest("Invalid email or password.");
   }
 
-  const [match, _updatedStaff, _revokedTokens, store] = await Promise.all([
+  const [match, _updatedStaff, _revokedTokens] = await Promise.all([
     bcrypt.compare(password, staff.password),
     staffRepository.updateStaff(staff._id, { isAuthenticated: true }),
     refreshTokenRepository.revokeRefreshToken({ userId: staff._id }),
-    storeRepository.getStoreStaffWorkIn(staff._id),
   ]);
-
-  if (!match) {
-    throw new BadRequest("Invalid email or password.");
-  }
 
   let payload = {
     userId: staff._id,
     role: staff.role,
-    // storeId: store._id,
   };
+
+  if (staff.role === "storeManager") {
+    const store = storeRepository.getStoreManagerWorkIn(staff._id);
+    payload.storeId = store._id;
+
+  } else if (staff.role !== "storeManager" || staff.role !== "admin") {
+    
+    const store = storeRepository.getStoreStaffWorkIn(staff._id);
+    payload.storeId = store._id;
+  }
+
+  if (!match) {
+    throw new BadRequest("Invalid email or password.");
+  }
 
   const accessToken = jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRES_IN,

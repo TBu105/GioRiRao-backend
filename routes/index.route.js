@@ -10,5 +10,6 @@ router.use("/drinks", require("./drink.route"));
 router.use("/orders", require("./order.route"));
 router.use("/staffs", require("./staff.route"));
 router.use("/statistics", require("./statistic.route"));
+router.use("/inventories", require("./inventory.route"));
 
 module.exports = router;
