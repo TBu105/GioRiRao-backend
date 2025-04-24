@@ -35,6 +35,7 @@ const getRevenueDayInRange = asyncHandler(async (req, res) => {
 });
 
 const getRevenueMonthOfYear = asyncHandler(async (req, res) => {
+  console.log("req.body.storeId", req.body);
   const revenueMonthOfYear = await statisticService.getRevenueMonthOfYear(
     req.body.storeId,
     req.body.year
@@ -88,5 +89,5 @@ module.exports = {
   getRevenueDayInRange,
   createRevenueByDate,
   createRevenueByMonth,
-  calculateTopTenDrinkByTimeType
+  calculateTopTenDrinkByTimeType,
 };

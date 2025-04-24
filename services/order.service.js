@@ -7,41 +7,6 @@ const mongoose = require("mongoose");
 const checkOrderTimeFrame = require("../utils/check.order.time.frame.util");
 const generateOrderCode = require("../utils/generate.order.code.util");
 
-// const createOrder = async (orderData) => {
-//   const session = await mongoose.startSession();
-
-//   try {
-//     session.startTransaction();
-//     // body
-//     if (!orderData.items) {
-//       throw new BadRequest("Order must have at least one drink");
-//     }
-
-//     const timeFrame = checkOrderTimeFrame("order");
-
-//     if (!timeFrame) {
-//       throw new BadRequest(
-//         "Can not create order due to time frame is not valid"
-//       );
-//     }
-
-//     orderData.timeFrame = timeFrame;
-//     orderData.code = generateOrderCode();
-//     orderData.status = "PENDING";
-
-//     const newOrder = await orderRepository.createOrder(orderData, session);
-
-//     await session.commitTransaction();
-
-//     return newOrder;
-//   } catch (error) {
-//     await session.abortTransaction();
-//     throw error;
-//   } finally {
-//     session.endSession();
-//   }
-// };
-
 const createOrder = async (orderData) => {
   const session = await mongoose.startSession();
   try {
@@ -125,7 +90,6 @@ const createOrder = async (orderData) => {
 
     // Step 5: Tạo đơn hàng
     const newOrder = await orderRepository.createOrder(orderData, session);
-
     await session.commitTransaction();
     return newOrder;
   } catch (error) {
@@ -134,6 +98,13 @@ const createOrder = async (orderData) => {
   } finally {
     session.endSession();
   }
+};
+const getOrderByCode = async (code) => {
+  const order = await orderRepository.getOrderByCode(code);
+  if (!order) {
+    throw new NotFound("Order not found");
+  }
+  return order;
 };
 
 const updateOrderStatusToComplete = async (orderId) => {
@@ -162,6 +133,7 @@ const getOrderDetail = async (orderId) => {
 };
 
 module.exports = {
+  getOrderByCode,
   createOrder,
   updateOrderStatusToComplete,
   getPendingOrdersByStoreandDate,

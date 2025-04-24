@@ -5,6 +5,10 @@ const createStore = async (storeData) => {
   return await store.save();
 };
 
+const getStoreById = async (storeId) => {
+  return await Store.findById(storeId).lean();
+};
+
 const updateStore = async (storeId, updateData) => {
   return await Store.findByIdAndUpdate(storeId, updateData, { new: true });
 };
@@ -17,6 +21,16 @@ const updateStoreStaff = async (storeId, staffId) => {
   );
 
   return updatedStaff;
+};
+
+const updateStoreManager = async (storeId, managerId) => {
+  const updateManager = await Store.findByIdAndUpdate(
+    storeId,
+    { managerId },
+    { new: true }
+  );
+
+  return updateManager;
 };
 
 const getStoresByArea = async (areaId) => {
@@ -64,7 +78,18 @@ const getStoreManagerWorkIn = async (staffId) => {
   return store;
 };
 
+const findStoreByName = async (name) => {
+  return await Store.findOne({ name }).lean();
+};
+const getStoreByManagerId = async (managerId) => {
+  return await Store.findOne({ managerId }).lean();
+};
+
 module.exports = {
+  getStoreByManagerId,
+  getStoreById,
+  getStaffsOfTheStore,
+  findStoreByName,
   createStore,
   updateStore,
   getStoresByArea,

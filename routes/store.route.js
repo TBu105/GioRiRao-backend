@@ -11,22 +11,30 @@ const {
 
 const router = express.Router();
 
-router.post(
-  "/:areaId",
-  validate(createStoreSchema),
-  storeController.createStore
+router.post("/", validate(createStoreSchema), storeController.createStore);
+router.put("/:id", storeController.updateStore);
+router.put(
+  "/:id/managerId",
+  validate(updateStoreManagerSchema),
+  storeController.updateManager
 );
-router.put("/:id", validate(updateStoreSchema), storeController.updateStore);
+router.put(
+  "/:id/staffs",
+  validate(updateStaffSchema),
+  storeController.updateStaff
+);
 router.delete(
-  "/staff/:id",
+  "/:id/staffs",
   validate(deleteStaffsSchema),
   storeController.deleteStaff
 );
+router.get("/:id", storeController.getStoreById);
 router.get("/area/:areaId", storeController.getStoresByAreaId);
 router.get("/staffs/:id", storeController.getStaffsOfTheStore);
 router.post("/manager/:storeId", storeController.addManagerToStore);
 router.post("/staff/:storeId", storeController.addStaffToStore);
 router.patch("/staffs/:storeId", storeController.deleteStaff);
 router.patch("/staffs/role/:storeId", storeController.changeStaffRole);
+router.get("/manager/:id", storeController.getStoreByManagerId);
 
 module.exports = router;

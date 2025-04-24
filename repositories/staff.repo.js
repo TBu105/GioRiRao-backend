@@ -10,8 +10,8 @@ const findStaff = async (data) => {
   return staff;
 };
 
-const findStaffById = async (staffId) => {
-  const staff = await Staff.findById(staffId, { deleted: false });
+const findStaffById = async (id) => {
+  const staff = await Staff.findById(id);
   return staff;
 };
 
@@ -24,8 +24,22 @@ const updateStaff = async (staffId, staffData) => {
 
   return updatedStaff;
 };
-
+const createStaff = async (data) => {
+  const staff = new Staff(data);
+  return await staff.save();
+};
+const findAllStaff = async () => {
+  const staff = await Staff.find({}).lean();
+  return staff;
+};
+const deleteStaff = async (id) => {
+  const deletedStaff = await Staff.findByIdAndDelete(id);
+  return deletedStaff;
+};
 module.exports = {
+  deleteStaff,
+  findAllStaff,
+  createStaff,
   signUpStaff,
   findStaff,
   findStaffById,
