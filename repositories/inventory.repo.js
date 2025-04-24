@@ -5,6 +5,12 @@ const findInventoryByStore = async ({ storeId }) => {
   return inventory;
 };
 
+const getInventoryByStore = async (storeId, session = null) => {
+  const inventory = await Inventory.findOne({ storeId }).session(session);
+  return inventory;
+};
+
 module.exports = {
   findInventoryByStore,
+  getInventoryByStore,
 };

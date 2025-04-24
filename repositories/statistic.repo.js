@@ -106,6 +106,7 @@ const calculateRevenueAMonth = async ({ storeId }) => {
 };
 
 const getRevenueDayInRange = async ({ storeId, startDate, endDate }) => {
+
   const storeRevenues = await StoreRevenue.find({
     storeId,
     createdAt: {

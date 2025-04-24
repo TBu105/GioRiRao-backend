@@ -11,5 +11,6 @@ router.use("/orders", require("./order.route"));
 router.use("/staffs", require("./staff.route"));
 router.use("/statistics", require("./statistic.route"));
 router.use("/inventories", require("./inventory.route"));
+router.use("/ai", require("./ai.route"));
 
 module.exports = router;

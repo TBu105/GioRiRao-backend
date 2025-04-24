@@ -88,7 +88,7 @@ const updateDrink = asyncHandler(async (req, res) => {
   // Chuyển đổi dữ liệu từ string sang array nếu cần
   if (typeof req.body.tags === "string") {
     req.body.tags = JSON.parse(req.body.tags);
-  }
+  } 
 
   if (typeof req.body.customization === "string") {
     req.body.customization = JSON.parse(req.body.customization);

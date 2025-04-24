@@ -5,6 +5,7 @@ const verifyAccessToken = require("../middlewares/verify.access.token.middleware
 const { uploadDisk } = require("../config/multer.config");
 const authorize = require("../middlewares/authorize.middleware");
 const { createDrinkSchema } = require("../validations/drink.validation");
+const Drink = require("../models/Drink");
 
 const router = express.Router();
 
@@ -41,5 +42,20 @@ router.post(
   drinkController.createDrink
 );
 router.get("/", drinkController.getAllDrinks);
+
+router.get("/all/ofthem", async (req, res) => {
+  const mySet = new Set();
+  const drinks = await Drink.find();
+
+  for (const drink of drinks) {
+    for (const item of drink.ingredients) {
+      mySet.add(item.name);
+    }
+  }
+
+  console.log("mySet", mySet);
+
+  res.json(mySet);
+});
 
 module.exports = router;

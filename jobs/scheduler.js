@@ -1,6 +1,8 @@
 const cron = require("node-cron");
 const statisticService = require("../services/statistic.service");
 const moment = require("moment");
+const { spawn } = require("child_process");
+const path = require("path");
 
 const checkAndCalculateShiftRevenue = async () => {
   console.log(`Running shift revenue calculation at`);
@@ -25,6 +27,49 @@ const checkAndCalculateMonthRevenue = async () => {
   }
 };
 
+const createPredictRevenueModel = async () => {
+  const dataFromDB = await statisticService.getRevenueDayInRange(
+    req.body.storeId,
+    req.body.fromDate,
+    req.body.toDate
+  );
+
+  return new Promise((resolve, reject) => {
+    const pyProcess = spawn(
+      path.join(__dirname, "../ai/venv/Scripts/python.exe"),
+      [path.join(__dirname, "../ai/train_model.py")]
+    );
+
+    let result = "";
+    let error = "";
+
+    // Lắng nghe output từ Python
+    pyProcess.stdout.on("data", (data) => {
+      result += data.toString();
+    });
+
+    pyProcess.stderr.on("data", (data) => {
+      error += data.toString();
+    });
+
+    pyProcess.on("close", (code) => {
+      if (code !== 0 || error) {
+        return reject(new Error(`Python error: ${error}`));
+      }
+      try {
+        const parsed = JSON.parse(result);
+        resolve(parsed);
+      } catch (err) {
+        reject(new Error(`Parse error: ${err.message}`));
+      }
+    });
+
+    // Gửi JSON vào stdin của Python
+    pyProcess.stdin.write(JSON.stringify(dataFromDB));
+    pyProcess.stdin.end();
+  });
+};
+
 const setupCronJobs = () => {
   console.log("⏰ Setting up cron jobs...");
 
@@ -37,4 +82,4 @@ const setupCronJobs = () => {
   cron.schedule("0 0 * * *", () => checkAndCalculateMonthRevenue);
 };
 
-module.exports = setupCronJobs;
+module.exports = { setupCronJobs, createPredictRevenueModel };
