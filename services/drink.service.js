@@ -5,7 +5,7 @@ const agenda = require("../config/agenda.config");
 
 const createDrink = async (drinkData, thumbnailFile, imageFiles) => {
   const newDrink = await drinkRepo.createDrink(drinkData);
-  await agenda.schedule("in 7 days", "set isNew to false", {
+  await agenda.schedule("in 1 second", "set isNew to false", {
     id: newDrink._id,
   });
   return newDrink;

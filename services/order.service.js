@@ -25,11 +25,8 @@ const createOrder = async (orderData) => {
     orderData.timeFrame = timeFrame;
     orderData.code = generateOrderCode();
     orderData.status = "PENDING";
-
     const newOrder = await orderRepository.createOrder(orderData, session);
-
     await session.commitTransaction();
-
     return newOrder;
   } catch (error) {
     await session.abortTransaction();
@@ -37,6 +34,13 @@ const createOrder = async (orderData) => {
   } finally {
     session.endSession();
   }
+};
+const getOrderByCode = async (code) => {
+  const order = await orderRepository.getOrderByCode(code);
+  if (!order) {
+    throw new NotFound("Order not found");
+  }
+  return order;
 };
 
 const updateOrderStatusToComplete = async (orderId) => {
@@ -65,6 +69,7 @@ const getOrderDetail = async (orderId) => {
 };
 
 module.exports = {
+  getOrderByCode,
   createOrder,
   updateOrderStatusToComplete,
   getPendingOrdersByStoreandDate,

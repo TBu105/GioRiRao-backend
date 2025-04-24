@@ -17,6 +17,10 @@ const createOrder = async (data, session) => {
     })),
   });
   await order.save({ session });
+  return order;
+};
+const getOrderByCode = async (code) => {
+  return await Order.findOne({ code }).lean();
 };
 
 const updateOrderStatusToComplete = async (orderId, status) => {
@@ -89,6 +93,7 @@ const calculateRevenueByShift = async (storeId, date, timeFrame) => {
 };
 
 module.exports = {
+  getOrderByCode,
   createOrder,
   updateOrderStatusToComplete,
   getPendingOrdersByStoreandDate,
