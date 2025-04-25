@@ -13,7 +13,6 @@ const revokeRefreshToken = async (data) => {
     { revoked: true },
     { new: true }
   );
-  console.log("revoke", revoke);
 
   return revoke;
 };

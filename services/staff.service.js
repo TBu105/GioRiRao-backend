@@ -24,7 +24,6 @@ const createStaff = async (data) => {
 };
 // staff-updateStaff
 const updateStaff = async (staffId, data) => {
-  console.log("data", data);
   const existingStaff = await staffRepository.findStaffById(staffId);
 
   if (!existingStaff) {
@@ -45,7 +44,6 @@ const getAllStaff = async () => {
   return staff;
 };
 const getStaffById = async (staffId) => {
-  console.log("staffid2", staffId);
   const staff = await staffRepository.findStaffById(staffId);
 
   if (!staff) {

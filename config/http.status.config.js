@@ -83,8 +83,4 @@ const HttpStatusCodes = {
   }
 };
 
-// Example usage:
-// console.log(HttpStatusCodes.FORBIDDEN.code);  Outputs: 403
-// console.log(HttpStatusCodes.FORBIDDEN.reason); Outputs: "You don't have access to this"
-
 module.exports = HttpStatusCodes;

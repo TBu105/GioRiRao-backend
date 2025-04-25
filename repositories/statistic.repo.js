@@ -16,9 +16,7 @@ const getStoreRevenueToday = async ({ storeId, day, month, year }) => {
 };
 
 const createStoreRevenue = async ({ storeId, revenue, day, month, year }) => {
-  console.log("currentDay repo", day);
-  console.log("currentMonth repo", month);
-  console.log("currentYear repo", year);
+
   const storeRevenue = new StoreRevenue({
     storeId,
     revenue,
@@ -29,7 +27,6 @@ const createStoreRevenue = async ({ storeId, revenue, day, month, year }) => {
 
   await storeRevenue.save();
 
-  console.log("storeRevenue repo", storeRevenue);
 
   return storeRevenue;
 };
@@ -174,7 +171,6 @@ const createTopTenDrinksByDate = async ({
     },
   ]);
 
-  console.log("Top drinks result:", result);
 
   const topDrink = new StoreTopDrink({
     storeId,
@@ -223,7 +219,6 @@ const createTopTenDrinksByMonth = async ({ storeId, month, year }) => {
     },
   ]);
 
-  console.log("Top drinks by month result:", aggregateResult);
 
   const topDrink = new StoreTopDrink({
     storeId,

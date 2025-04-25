@@ -173,8 +173,6 @@ const getPredictedRevenue = asyncHandler(async (req, res) => {
     storeId: req.params.storeId,
   });
 
-  console.log("predictedRevenue", predictedRevenue);
-
   res.status(HttpStatusCodes.OK.code).json({
     predictedRevenue,
   });

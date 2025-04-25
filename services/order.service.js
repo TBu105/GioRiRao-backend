@@ -69,18 +69,15 @@ const createOrder = async (orderData) => {
     //   }
     // }
 
-    console.log("storeInventory truoc", storeInventory);
 
     // Step 4: Trừ kho
     for (const [name, usedQty] of Object.entries(totalIngredients)) {
       const invItem = storeInventory.ingredients.find(
         (ing) => ing.name.trim().toLowerCase() === name.trim().toLowerCase()
       );
-      console.log("invItem truoc", invItem);
 
       if (invItem) {
         invItem.quantity -= usedQty;
-        console.log("invItem.quantity sau", invItem.quantity);
       } else {
         console.warn(`Không tìm thấy nguyên liệu: ${name}`);
       }

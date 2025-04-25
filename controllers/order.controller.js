@@ -4,7 +4,6 @@ const orderService = require("../services/order.service");
 
 const createOrder = asyncHandler(async (req, res) => {
   const newOrder = await orderService.createOrder(req.body);
-  console.log("newOrder", newOrder);
   return res.status(HttpStatusCodes.CREATED.code).json({
     message: "Create order successfully",
     newOrder,

@@ -19,10 +19,6 @@ const createRevenueByMonth = asyncHandler(async (req, res) => {
 });
 
 const getRevenueDayInRange = asyncHandler(async (req, res) => {
-  console.log("req.body.storeId", req.body.storeId);
-  console.log("req.body.fromDate", req.body.fromDate);
-  console.log("req.body.toDate", req.body.toDate);
-
   const revenueDayOfWeek = await statisticService.getRevenueDayInRange(
     req.body.storeId,
     req.body.fromDate,
@@ -35,7 +31,6 @@ const getRevenueDayInRange = asyncHandler(async (req, res) => {
 });
 
 const getRevenueMonthOfYear = asyncHandler(async (req, res) => {
-  console.log("req.body.storeId", req.body);
   const revenueMonthOfYear = await statisticService.getRevenueMonthOfYear(
     req.body.storeId,
     req.body.year

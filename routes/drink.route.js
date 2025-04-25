@@ -53,8 +53,6 @@ router.get("/all/ofthem", async (req, res) => {
     }
   }
 
-  console.log("mySet", mySet);
-
   res.json(mySet);
 });
 

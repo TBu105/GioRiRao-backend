@@ -64,12 +64,10 @@ const loginStaff = async (email, password) => {
   };
 
   if (staff.role === "storeManager") {
-    const store = storeRepository.getStoreManagerWorkIn(staff._id);
+    const store = await storeRepository.getStoreManagerWorkIn(staff._id);
     payload.storeId = store._id;
-
-  } else if (staff.role !== "storeManager" || staff.role !== "admin") {
-    
-    const store = storeRepository.getStoreStaffWorkIn(staff._id);
+  } else if (staff.role !== "storeManager" && staff.role !== "admin") {
+    const store = await storeRepository.getStoreStaffWorkIn(staff._id);
     payload.storeId = store._id;
   }
 
@@ -94,8 +92,6 @@ const loginStaff = async (email, password) => {
   const savedRefreshToken = await refreshTokenRepository.createRefreshToken(
     newRefreshToken
   );
-
-  console.log("savedRefreshToken", savedRefreshToken);
 
   const token = {
     accessToken,

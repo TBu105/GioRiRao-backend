@@ -6,7 +6,6 @@ const generateSecretKey = () => {
 };
 
 const generateToken = (payload, secretKey, expireTime) => {
-  // console.log("payload:::", payload);
   return sign(payload, secretKey, {
     expiresIn: expireTime,
     algorithm: "HS256",

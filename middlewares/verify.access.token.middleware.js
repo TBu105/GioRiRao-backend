@@ -15,8 +15,6 @@ const verifyAccessToken = (req, res, next) => {
 
     req.user = decoded;
 
-    console.log("req.user", req.user);
-
     next();
   } catch (err) {
     // err

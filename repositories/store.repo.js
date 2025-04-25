@@ -68,7 +68,6 @@ const getAllStoreId = async () => {
 
 const getStoreStaffWorkIn = async (staffId) => {
   const store = await Store.findOne({ staffs: staffId });
-
   return store;
 };
 
@@ -99,5 +98,5 @@ module.exports = {
   getStaffsOfTheStore,
   getAllStoreId,
   getStoreStaffWorkIn,
-  getStoreManagerWorkIn
+  getStoreManagerWorkIn,
 };

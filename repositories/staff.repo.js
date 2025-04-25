@@ -20,12 +20,11 @@ const updateStaff = async (staffId, staffData) => {
     new: true,
   });
 
-  console.log("updatedStaff", updatedStaff);
-
   return updatedStaff;
 };
 const createStaff = async (data) => {
   const staff = new Staff(data);
+  console.log("staff createStaff", staff);
   return await staff.save();
 };
 const findAllStaff = async () => {

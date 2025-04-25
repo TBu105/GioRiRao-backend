@@ -91,7 +91,6 @@ const updateDrink = asyncHandler(async (req, res) => {
   if (tagsResult.error)
     return res.status(400).json({ message: tagsResult.error });
   req.body.tags = tagsResult.value;
-  console.log("data drink update", req.body);
   const updatedDrink = await drinkService.updateDrink(id, req.body);
   return res.status(HttpStatusCodes.OK.code).json({
     message: "Drink updated successfully",

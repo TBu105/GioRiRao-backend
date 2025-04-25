@@ -25,7 +25,6 @@ const createStaff = asyncHandler(async (req, res) => {
     imgHeight: 300,
     imgWidth: 300,
   });
-  console.log("staffThumbnail", staffThumbnail);
   // Cập nhật ảnh đại diện cho staff vừa tạo
   const updatedStaff = await staffService.updateStaff(newStaff._id, {
     avatar: staffThumbnail.photoUrl,
