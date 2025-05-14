@@ -36,8 +36,14 @@ const createTopping = asyncHandler(async (req, res) => {
 const getAllToppings = asyncHandler(async (req, res) => {
   const toppings = await toppingService.getAllToppings();
 
+  const name = [];
+  for (const t of toppings) {
+    name.push(t.name);
+  }
+
   res.status(HttpStatusCodes.OK.code).json({
     message: "Get all toppings successfully",
+    name,
     toppings,
   });
 });

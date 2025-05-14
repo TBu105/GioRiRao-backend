@@ -8,16 +8,16 @@ const authorize = require("../middlewares/authorize.middleware");
 
 router.post(
   "/",
-  //   verifyAccessToken,
-  //   authorize(["admin"]),
+  verifyAccessToken,
+  authorize(["admin"]),
   uploadDisk.single("thumbnail"),
   toppingController.createTopping
 );
 
 router.get(
   "/",
-  //   verifyAccessToken,
-  //   authorize(["admin"]),
+  verifyAccessToken,
+  authorize(["admin"]),
   toppingController.getAllToppings
 );
 router.put("/:id", toppingController.updateTopping);

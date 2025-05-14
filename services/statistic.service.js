@@ -7,7 +7,7 @@ const moment = require("moment");
 // REVENUE
 
 const createRevenueByDate = async () => {
-  const timeFrame = checkOrderTimeFrame("statistic");
+  const timeFrame = checkOrderTimeFrame("order");
   const date = new Date(); // hoặc dùng moment.js nếu bạn đã xài
   const day = date.getDate();
   const month = date.getMonth() + 1;
@@ -30,18 +30,24 @@ const createRevenueByDate = async () => {
         timeFrame
       );
 
+      console.log("revenueByTimeFrame", revenueByTimeFrame);
+      console.log("storeRevenue[0].revenue", storeRevenue);
+
       const revenue =
         storeRevenue.length !== 0
-          ? storeRevenue[0].revenue + revenueByTimeFrame
+          ? /**storeRevenue[0].revenue + */ revenueByTimeFrame
           : revenueByTimeFrame;
 
       if (storeRevenue.length !== 0) {
+        console.log("revenue update", revenue);
         await statisticRepository.updateStoreRevenue({
           storeId,
           revenue,
           date,
         });
       } else {
+        console.log("revenue create", revenue);
+
         await statisticRepository.createStoreRevenue({
           storeId,
           revenue,
@@ -69,7 +75,7 @@ const createRevenueByMonth = async () => {
         storeId,
       });
 
-      await statisticRepository.createStoreRevenue({
+      await statisticRepository.createStoreRevenueMonth({
         storeId,
         revenue,
         month,
@@ -86,8 +92,13 @@ const getRevenueDayInRange = async (storeId, startDate, endDate) => {
     startDate,
     endDate,
   });
+  const sortedRevenues = revenues.sort(
+    (a, b) => new Date(a.createAt) - new Date(b.createAt)
+  );
 
-  return revenues;
+  console.log("revenues getRevenueDayInRange", sortedRevenues);
+
+  return sortedRevenues;
 };
 
 const getRevenueMonthOfYear = async (storeId, year) => {
@@ -135,7 +146,7 @@ const calculateTopTenDrinkByTimeType = async (timeType) => {
   const day = now.date(); // Ngày trong tháng (1-31)
   const month = now.month() + 1; // Tháng (0-11 → nên cộng thêm 1)
   const year = now.year(); // Năm (vd: 2025)
-  const timeFrame = checkOrderTimeFrame("statistic");
+  const timeFrame = checkOrderTimeFrame("order");
 
   if (timeType === "day") {
     await Promise.all(
@@ -161,6 +172,8 @@ const getTopTenDrinksByDay = async (storeId, day, year) => {
     year,
   });
 
+  console.log("topDrinks", topDrinks);
+
   return topDrinks || [];
 };
 
@@ -170,6 +183,8 @@ const getTopTenDrinksByMonth = async (storeId, month, year) => {
     month,
     year,
   });
+
+  console.log("topDrinks month", topDrinks);
 
   return topDrinks || [];
 };

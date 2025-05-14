@@ -16,7 +16,6 @@ const getStoreRevenueToday = async ({ storeId, day, month, year }) => {
 };
 
 const createStoreRevenue = async ({ storeId, revenue, day, month, year }) => {
-
   const storeRevenue = new StoreRevenue({
     storeId,
     revenue,
@@ -27,8 +26,28 @@ const createStoreRevenue = async ({ storeId, revenue, day, month, year }) => {
 
   await storeRevenue.save();
 
-
   return storeRevenue;
+};
+
+const createStoreRevenueMonth = async ({ storeId, revenue, month, year }) => {
+  const existing = await StoreRevenue.findOne({
+    storeId,
+    month,
+    year,
+    day: { $exists: false },
+  });
+
+  console.log("existing", existing);
+
+  if (existing) {
+    existing.revenue = revenue; // hoặc += revenue nếu cộng dồn
+    await existing.save();
+    return existing;
+  } else {
+    const newRevenue = new StoreRevenue({ storeId, revenue, month, year });
+    await newRevenue.save();
+    return newRevenue;
+  }
 };
 
 const updateStoreRevenue = async ({ storeId, revenue, date }) => {
@@ -93,25 +112,34 @@ const calculateRevenueAMonth = async ({ storeId }) => {
       $gte: startOfMonth,
       $lte: endOfMonth,
     },
+    day: { $exists: true },
   });
 
   const revenues = storeRevenues.map((storeRevenue) => storeRevenue.revenue);
 
+  console.log("revenues", revenues);
+
   const totalRevenue = revenues.reduce((acc, revenue) => acc + revenue, 0);
+
+  console.log("totalRevenue", totalRevenue);
 
   return totalRevenue;
 };
 
 const getRevenueDayInRange = async ({ storeId, startDate, endDate }) => {
-
+  // console.log("startDate", startDate);
+  // console.log("endDate", endDate);
+  // console.log("storeId", storeId);
   const storeRevenues = await StoreRevenue.find({
     storeId,
-    createdAt: {
+    createAt: {
       $gte: startDate,
       $lte: endDate,
     },
     day: { $exists: true },
   });
+
+  // console.log("storeRevenues repo", storeRevenues);
 
   return storeRevenues;
 };
@@ -139,6 +167,8 @@ const createTopTenDrinksByDate = async ({
   const endDate = new Date(today);
   endDate.setUTCHours(23, 59, 59, 999);
 
+  console.log("timeFrame", timeFrame);
+
   const result = await Order.aggregate([
     {
       $match: {
@@ -148,7 +178,7 @@ const createTopTenDrinksByDate = async ({
           $lte: endDate,
         },
         status: "COMPLETED",
-        timeFrame: 2,
+        timeFrame,
       },
     },
     { $unwind: "$items" },
@@ -171,23 +201,34 @@ const createTopTenDrinksByDate = async ({
     },
   ]);
 
-
-  const topDrink = new StoreTopDrink({
+  const existing = await StoreTopDrink.findOne({
     storeId,
     day,
     month,
     year,
-    topDrinks: result,
+    day: { $exists: true },
   });
 
-  return await topDrink
-    .save()
-    .then(() => {
-      console.log("Top drinks saved successfully!");
-    })
-    .catch((error) => {
-      console.error("Error saving top drinks:", error);
+  if (existing) {
+    // Cập nhật lại topDrinks nếu đã có
+    existing.topDrinks = result;
+    await existing.save();
+    console.log("Top drinks updated successfully!");
+    return existing;
+  } else {
+    // Tạo mới nếu chưa có
+    const topDrink = new StoreTopDrink({
+      storeId,
+      day,
+      month,
+      year,
+      topDrinks: result,
     });
+
+    await topDrink.save();
+    console.log("Top drinks saved successfully!");
+    return topDrink;
+  }
 };
 
 const createTopTenDrinksByMonth = async ({ storeId, month, year }) => {
@@ -219,22 +260,32 @@ const createTopTenDrinksByMonth = async ({ storeId, month, year }) => {
     },
   ]);
 
-
-  const topDrink = new StoreTopDrink({
+  const existing = await StoreTopDrink.findOne({
     storeId,
     month,
     year,
-    topDrinks: aggregateResult,
+    day: { $exists: false },
   });
 
-  return await topDrink
-    .save()
-    .then(() => {
-      console.log("Top drinks by month saved successfully!");
-    })
-    .catch((error) => {
-      console.error("Error saving top drinks by month:", error);
+  if (existing) {
+    // Cập nhật lại topDrinks nếu đã có
+    existing.topDrinks = aggregateResult;
+    await existing.save();
+    console.log("Top drinks updated successfully!");
+    return existing;
+  } else {
+    // Tạo mới nếu chưa có
+    const topDrink = new StoreTopDrink({
+      storeId,
+      month,
+      year,
+      topDrinks: aggregateResult,
     });
+
+    await topDrink.save();
+    console.log("Top drinks saved successfully!");
+    return topDrink;
+  }
 };
 
 const getTopTenDrinksByDay = async ({ storeId, day, year }) => {
@@ -279,4 +330,5 @@ module.exports = {
   getTopTenDrinksByDay,
   getTopTenDrinksByMonth,
   getRevenueDayInRange,
+  createStoreRevenueMonth,
 };

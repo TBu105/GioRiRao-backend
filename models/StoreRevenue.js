@@ -14,7 +14,7 @@ const StoreRevenueSchema = new mongoose.Schema(
       index: true,
     },
     day: {
-      type: Number
+      type: Number,
     },
     month: {
       type: Number,
@@ -27,24 +27,15 @@ const StoreRevenueSchema = new mongoose.Schema(
       required: true,
       default: 0,
     },
+    createAt: {
+      type: Date,
+    },
   },
   {
     timestamps: true, // Automatically manage createdAt and updatedAt fields
     collection: COLLECTION_NAME, // Specify the collection name
   }
 );
-
-/**
- * Query pattern riêng
- *
- * Hiển thị doanh thu cửa hàng
- */
-
-/**
- * Query pattern chung
- *
- * Sau 4 tiếng
- */
 
 // Index for query faster
 StoreRevenueSchema.index({ storeId: 1, date: 1 });

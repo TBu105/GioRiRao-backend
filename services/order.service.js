@@ -40,17 +40,20 @@ const createOrder = async (orderData) => {
         totalIngredients[key] = (totalIngredients[key] || 0) + amount;
       });
 
+      console.log("topping", item);
+
       for (const topping of item.toppings) {
-        const toppingDoc = await toppingRepository.findTopping(
-          topping.toppingId
-        );
+        const toppingDoc = await toppingRepository.findTopping({
+          _id: topping.toppingId,
+        });
+        console.log("toppingDoc", toppingDoc);
         if (!toppingDoc) throw new BadRequest("Topping not found");
 
-        toppingDoc.ingredients.forEach((ing) => {
-          const key = ing.name;
-          const amount = parseFloat(ing.quantity) * item.quantity;
-          totalIngredients[key] = (totalIngredients[key] || 0) + amount;
-        });
+        // toppingDoc.ingredients.forEach((ing) => {
+        //   const key = ing.name;
+        //   const amount = parseFloat(ing.quantity) * item.quantity;
+        // });
+        totalIngredients[toppingDoc.name] = 1
       }
     }
 
@@ -68,7 +71,6 @@ const createOrder = async (orderData) => {
     //     throw new BadRequest(`Not enough ingredient: ${name}`);
     //   }
     // }
-
 
     // Step 4: Trừ kho
     for (const [name, usedQty] of Object.entries(totalIngredients)) {
